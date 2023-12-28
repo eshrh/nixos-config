@@ -7,6 +7,7 @@
     pkgs.libreoffice
     pkgs.qbittorrent
     pkgs.zotero
+    pkgs.gimp
   ];
   programs.alacritty.enable = true;
   programs.firefox.enable = true;

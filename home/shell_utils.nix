@@ -16,5 +16,7 @@
     pkgs.mpv
     pkgs.killall
     pkgs.alejandra
+    pkgs.waifu2x-converter-cpp
+    pkgs.ncdu
   ];
 }
