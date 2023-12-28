@@ -10,6 +10,7 @@
     stephen-huan = {
       url = "github:stephen-huan/nixos-config";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
   };
 
