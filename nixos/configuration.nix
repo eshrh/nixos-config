@@ -24,7 +24,6 @@
     layout = "us";
     xkbVariant = "dvorak";
   };
-
   console.keyMap = "dvorak";
 
   programs.fish.enable = true;
@@ -37,10 +36,7 @@
 
   environment.systemPackages = with pkgs; [
     emacs
-    fish
     git
-    xterm
-    pulseaudio
   ];
 
   security.rtkit.enable = true;
@@ -53,6 +49,5 @@
   };
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
-
   system.stateVersion = "23.11";
 }
