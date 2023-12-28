@@ -4,10 +4,6 @@
   lib,
   ...
 }: {
-  nixpkgs.overlays = [
-    (import ./ibus-mozcut.nix)
-    (import ./mozcdic-ut-shim.nix)
-  ];
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {

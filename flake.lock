@@ -20,6 +20,42 @@
         "type": "github"
       }
     },
+    "home-manager_2": {
+      "inputs": {
+        "nixpkgs": [
+          "stephen-huan",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1703178811,
+        "narHash": "sha256-Orbqa8DvszYZ38XGWAs43hVs++czt2N6/Y0sFRLhJms=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "fb5ac0c870a1b3ffea70e02ab1720d991ce812ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "impermanence": {
+      "locked": {
+        "lastModified": 1702984171,
+        "narHash": "sha256-reIUBrUXibohXmvXRsgpvtlCE0QQSvWSA+qQCKohgR0=",
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "rev": "123e94200f63952639492796b8878e588a4a2851",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "impermanence",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1703438236,
@@ -39,7 +75,30 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "stephen-huan": "stephen-huan"
+      }
+    },
+    "stephen-huan": {
+      "inputs": {
+        "home-manager": "home-manager_2",
+        "impermanence": "impermanence",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1703574365,
+        "narHash": "sha256-d7cB7EdguhvkUBJzuRDgg0/3XZyvcw+5JMg3FkmSK7w=",
+        "owner": "stephen-huan",
+        "repo": "nixos-config",
+        "rev": "d84d0bdccbcfbfbd2504ae3bac9b8db373d04ad0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stephen-huan",
+        "repo": "nixos-config",
+        "type": "github"
       }
     }
   },

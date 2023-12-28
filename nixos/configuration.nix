@@ -8,7 +8,7 @@
     ./hardware-configuration.nix
     ./networking.nix
     ./caps_to_esc.nix
-    ./language/language.nix
+    ./ibus.nix
     ./fonts/fonts.nix
   ];
 

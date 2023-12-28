@@ -7,16 +7,21 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stephen-huan = {
+      url = "github:stephen-huan/nixos-config";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
+    stephen-huan,
     ...
   } @ inputs: {
     nixosConfigurations = {
-      "helianthus" = nixpkgs.lib.nixosSystem {
+      "helianthus" = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
           ./nixos/configuration.nix
@@ -25,6 +30,13 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.esrh = import ./home/home.nix;
+          }
+          {
+            nixpkgs.overlays = with stephen-huan.overlays; [
+              ibus-engines
+              maintainers
+              (final: prev: { inherit (stephen-huan.packages.${system}) mozcdic-ut; })
+            ];
           }
         ];
       };
