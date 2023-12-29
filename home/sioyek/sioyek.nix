@@ -6,7 +6,7 @@
   home.packages = [
     pkgs.sioyek
   ];
-  home.file."${config.xdg.configHome}/sioyek" = {
+  xdg.configFile."sioyek" = {
     source = ./conf;
     recursive = true;
   };

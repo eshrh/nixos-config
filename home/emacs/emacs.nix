@@ -7,7 +7,7 @@
   home.sessionVariables = {
     EDITOR = "emacs";
   };
-  home.file."${config.xdg.configHome}/emacs" = {
+  xdg.configFile."emacs" = {
     source = ./conf;
     recursive = true;
   };

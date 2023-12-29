@@ -6,7 +6,7 @@
   home.packages = [
     pkgs.pulsemixer
   ];
-  home.file."${config.xdg.configHome}/pulsemixer.cfg".text = ''
+  xdg.configFile."pulsemixer.cfg".text = ''
     [general]
      step = 1
      step-big = 10
