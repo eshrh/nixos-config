@@ -15,6 +15,7 @@
     ./wallpaper/wallpaper.nix
     ./git.nix
     ./dunst/dunst.nix
+    ./music/music.nix
   ];
   home.username = "esrh";
   home.homeDirectory = "/home/esrh";
