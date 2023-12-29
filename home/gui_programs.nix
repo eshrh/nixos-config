@@ -9,6 +9,8 @@
     pkgs.zotero
     pkgs.gimp
   ];
-  programs.alacritty.enable = true;
-  programs.firefox.enable = true;
+  programs = {
+    alacritty.enable = true;
+    firefox.enable = true;
+  };
 }
