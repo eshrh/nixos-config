@@ -14,6 +14,7 @@
     ./pulsemixer/pulsemixer.nix
     ./wallpaper/wallpaper.nix
     ./git.nix
+    ./dunst/dunst.nix
   ];
   home.username = "esrh";
   home.homeDirectory = "/home/esrh";

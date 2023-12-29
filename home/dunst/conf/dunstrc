@@ -1,0 +1,56 @@
+# See dunst(5) for all configuration options
+[global]
+    follow = keyboard
+    indicate_hidden = yes
+    sort = yes
+    hide_duplicate_count = true
+
+    width = 300
+    height = 300
+    origin = bottom-right
+    offset = 10x30
+
+    horizontal_padding = 8
+    frame_width = 3
+    corner_radius = 10
+
+    separator_color = auto
+
+    font = Iosevka Meiseki Sans 8
+    line_height = 0
+
+    #   %a  appname
+    #   %s  summary
+    #   %b  body
+    #   %i  iconname (including its path)
+    #   %I  iconname (without its path)
+    #   %p  progress value if set ([  0%] to [100%]) or nothing
+    #   %n  progress value if set without any extra characters
+    #   %%  Literal %
+    format = "<b>%a: %s</b>\n%b"
+    alignment = left
+    show_age_threshold = 120
+    ellipsize = end
+
+    icon_position = off
+
+    title = Dunst
+    class = Dunst
+
+[urgency_low]
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#ffffff"
+    timeout = 1
+
+[urgency_normal]
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#ffffff"
+    timeout = 1
+
+[urgency_critical]
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#f00000"
+    timeout = 0
