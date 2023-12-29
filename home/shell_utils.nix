@@ -18,5 +18,6 @@
     pkgs.alejandra
     pkgs.waifu2x-converter-cpp
     pkgs.ncdu
+    pkgs.pulseaudio  # for pactl
   ];
 }
