@@ -42,9 +42,9 @@ config hasBattery hasMPD screen =
       sepChar = "%",
       alignSep = "}{",
       template =
-        "%StdinReader% " ++ batteryText
+        "%StdinReader% " ++ (if hasBattery then "/ %battery% " else "")
           ++ "/ %multicpu% / %memory% /}{"
-          ++ mpdText
+          ++ (if hasMPD then "%mpd% / " else "")
           ++ "%ws% / %date%",
       -- general behavior
       lowerOnStart = True,
@@ -76,7 +76,7 @@ config hasBattery hasMPD screen =
           ++ [ Run $
                  BatteryP
                    ["BAT0"]
-                   [ "-t", "<acstatus><watts> (<left>%)",
+                   [ "-t", "<acstatus> (<left>%)",
                      "--",
                      "-O", "<fc=green>On</fc> - ",
                      "-a", "notify-send -u critical 'battery low'",
@@ -99,6 +99,3 @@ config hasBattery hasMPD screen =
                | hasMPD
              ]
     }
-  where
-    batteryText = if hasBattery then "/ %battery% " else ""
-    mpdText = if hasMPD then "%mpd% / " else ""
