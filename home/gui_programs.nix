@@ -1,13 +1,14 @@
 {pkgs, ...}: {
   home.packages = [
-    pkgs.feh
-    pkgs.anki
     pkgs.android-tools
-    pkgs.signal-desktop
+    pkgs.anki
+    pkgs.feh
+    pkgs.gimp
     pkgs.libreoffice
     pkgs.qbittorrent
+    pkgs.signal-desktop
+    pkgs.thunderbird
     pkgs.zotero
-    pkgs.gimp
   ];
   programs = {
     alacritty.enable = true;
