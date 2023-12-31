@@ -15,8 +15,4 @@
 in {
   home.file.".cache/wal/sequences".source = "${wal}";
   home.file.".background-image".source = ./wallpaper.png;
-  xsession = {
-    enable = true;
-    initExtra = ''${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image'';
-  };
 }

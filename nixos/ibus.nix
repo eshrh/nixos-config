@@ -23,4 +23,10 @@
       ibus.engines = with pkgs.ibus-engines; [mozc-ut];
     };
   };
+
+  # ibus will not start automatically,
+  # this option is necessary to run the autostart file that
+  # creates the service for the ibus daemon.
+  # https://wiki.archlinux.org/title/XDG_Autostart
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
 }
