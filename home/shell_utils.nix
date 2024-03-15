@@ -19,5 +19,6 @@
     pkgs.yt-dlp
     pkgs.zip
     pkgs.zoxide
+    pkgs.texliveMedium
   ];
 }

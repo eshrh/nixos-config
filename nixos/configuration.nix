@@ -20,9 +20,9 @@
   time.timeZone = "America/New_York";
   services.xserver.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "dvorak";
+    variant = "dvorak";
   };
   console.keyMap = "dvorak";
 
