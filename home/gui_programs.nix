@@ -9,6 +9,7 @@
     pkgs.signal-desktop
     pkgs.thunderbird
     pkgs.zotero
+    pkgs.gnuradio
   ];
   programs = {
     alacritty.enable = true;
