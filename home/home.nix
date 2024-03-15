@@ -10,6 +10,7 @@
     ./fish/fish.nix
     ./shell_utils.nix
     ./gui_programs.nix
+    ./dev.nix
     ./sioyek/sioyek.nix
     ./pulsemixer/pulsemixer.nix
     ./wallpaper/wallpaper.nix

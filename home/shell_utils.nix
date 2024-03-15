@@ -10,7 +10,6 @@
     pkgs.neofetch
     pkgs.pandoc
     pkgs.pulseaudio  # for pactl
-    pkgs.python3
     pkgs.pywal
     pkgs.ripgrep
     pkgs.scrot
