@@ -20,5 +20,8 @@
     pkgs.zip
     pkgs.zoxide
     pkgs.texliveMedium
+    pkgs.ispell
+    pkgs.unzip
+    pkgs.libqalculate
   ];
 }
