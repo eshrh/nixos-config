@@ -21,6 +21,9 @@
       python-pkgs.torchvision
       python-pkgs.jax
       python-pkgs.jaxlib
+
     ]))
+    pkgs.gnumake
+    pkgs.gcc
   ];
 }

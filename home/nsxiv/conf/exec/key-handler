@@ -1,0 +1,25 @@
+#!/usr/bin/env mts
+
+(defun make-best []
+  (unless (any? (map |(and
+               (= $ "best")
+               (= ((os-stat $) :mode) :directory))
+             ($ ls)))
+          (os-mkdir "best")))
+
+(defun cp [file rotate]
+  (make-best)
+  (def out-path (s+ (os-cwd) "/best/" (basename file)
+                    (if rotate "_r" "")
+                    ".jpg"))
+  (if rotate
+    ($ convert -rotate 90 $file $out-path)
+    ($ cp $file $out-path))
+  (pp (s+ "copied: " file)))
+
+(cli
+ (def file (s// (getline)))
+ (match (first args)
+        "n" (cp file nil)
+        "r" (cp file true)
+        _ (pp (s+ "unknown: " (first args)))))

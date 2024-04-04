@@ -9,6 +9,7 @@
     ./xmobar/xmobar.nix
     ./fish/fish.nix
     ./shell_utils.nix
+    ./nsxiv/nsxiv.nix
     ./gui_programs.nix
     ./dev.nix
     ./sioyek/sioyek.nix

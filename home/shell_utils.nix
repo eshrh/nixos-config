@@ -19,9 +19,10 @@
     pkgs.yt-dlp
     pkgs.zip
     pkgs.zoxide
-    pkgs.texliveMedium
+    pkgs.texliveFull
     pkgs.ispell
     pkgs.unzip
     pkgs.libqalculate
+    pkgs.imagemagick
   ];
 }
