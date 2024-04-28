@@ -2,27 +2,31 @@
   home.packages = [
     pkgs.alejandra
     pkgs.cmake
-    pkgs.ffmpeg
     pkgs.jq
-    pkgs.killall
-    pkgs.mpv
-    pkgs.ncdu
-    pkgs.neofetch
     pkgs.pandoc
-    pkgs.pulseaudio  # for pactl
-    pkgs.pywal
     pkgs.ripgrep
+    pkgs.killall
+    pkgs.zoxide
+    pkgs.zip
+    pkgs.unzip
+    pkgs.ispell
+    pkgs.ncdu
+    pkgs.pulseaudio  # for pactl
+
+    pkgs.neofetch
+    pkgs.pywal
+    pkgs.ffmpeg
+    pkgs.mpv
     pkgs.scrot
-    pkgs.tree
     pkgs.waifu2x-converter-cpp
     pkgs.xclip
     pkgs.yt-dlp
-    pkgs.zip
-    pkgs.zoxide
-    pkgs.texliveFull
-    pkgs.ispell
-    pkgs.unzip
-    pkgs.libqalculate
     pkgs.imagemagick
+
+    pkgs.texliveFull
+    pkgs.libqalculate
+    pkgs.octave
+    pkgs.sage
+    pkgs.sagetex
   ];
 }

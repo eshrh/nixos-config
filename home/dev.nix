@@ -11,6 +11,7 @@
       python-pkgs.ipython
       python-pkgs.pyarrow
       python-pkgs.pyqt6
+      python-pkgs.pyzmq
 
       python-pkgs.python-lsp-server
       python-pkgs.pylsp-mypy
@@ -25,5 +26,8 @@
     ]))
     pkgs.gnumake
     pkgs.gcc
+
+    pkgs.ghc
+    pkgs.racket
   ];
 }
