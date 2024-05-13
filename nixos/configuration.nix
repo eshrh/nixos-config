@@ -10,6 +10,7 @@
     ./caps_to_esc.nix
     ./ibus.nix
     ./fonts/fonts.nix
+    ./razer/razer.nix
   ];
 
   # Bootloader.
@@ -30,7 +31,7 @@
   users.users.esrh = {
     isNormalUser = true;
     description = "Eshan Ramesh";
-    extraGroups = ["networkmanager" "wheel" "audio"];
+    extraGroups = ["networkmanager" "wheel" "audio" "openrazer"];
     shell = pkgs.fish;
   };
 

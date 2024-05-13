@@ -26,6 +26,7 @@
     ]))
     pkgs.gnumake
     pkgs.gcc
+    pkgs.libtool
 
     pkgs.ghc
     pkgs.racket
