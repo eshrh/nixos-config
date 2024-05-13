@@ -13,6 +13,7 @@
     pkgs.gnuradio
     pkgs.uhd
     pkgs.foliate
+    pkgs.osu-lazer-bin
   ];
   programs = {
     alacritty.enable = true;

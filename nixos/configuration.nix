@@ -11,6 +11,7 @@
     ./ibus.nix
     ./fonts/fonts.nix
     ./razer/razer.nix
+    ./nonfree.nix
   ];
 
   # Bootloader.
