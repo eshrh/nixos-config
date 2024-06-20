@@ -25,6 +25,11 @@
           LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd
           EVENTS:
             EV_KEY: [[KEY_CAPSLOCK, KEY_ESC, KEY_LEFTCTRL]]
+      - JOB: "${pkgs.interception-tools}/bin/intercept -g $DEVNODE | ${pkgs.interception-tools-plugins.dual-function-keys}/bin/dual-function-keys -c ${dfkConfig} | ${pkgs.interception-tools}/bin/uinput -d $DEVNODE"
+        DEVICE:
+          LINK: /dev/input/by-id/usb-SINO_WEALTH_Gaming_KB-event-kbd
+          EVENTS:
+            EV_KEY: [[KEY_CAPSLOCK, KEY_ESC, KEY_LEFTCTRL]]
     '';
   };
 }

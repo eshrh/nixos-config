@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{pkgs, ...}:
+ {
   home.packages = [
     pkgs.android-tools
     pkgs.anki
@@ -14,6 +15,8 @@
     pkgs.uhd
     pkgs.foliate
     pkgs.osu-lazer-bin
+    pkgs.zoom-us
+    pkgs.teams-for-linux
   ];
   programs = {
     alacritty.enable = true;

@@ -35,8 +35,8 @@
           {
             nixpkgs.overlays = with stephen-huan.overlays; [
               ibus-engines
-              maintainers
               (final: prev: { inherit (stephen-huan.packages.${system}) mozcdic-ut; })
+              sioyek
             ];
           }
         ];

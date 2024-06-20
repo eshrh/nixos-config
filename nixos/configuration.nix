@@ -28,7 +28,6 @@
   };
   console.keyMap = "dvorak";
 
-  programs.fish.enable = true;
   users.users.esrh = {
     isNormalUser = true;
     description = "Eshan Ramesh";
@@ -40,6 +39,8 @@
     emacs
     git
   ];
+  programs.fish.enable = true;
+  programs.steam.enable = true;
 
   security.rtkit.enable = true;
   services.pipewire = {
