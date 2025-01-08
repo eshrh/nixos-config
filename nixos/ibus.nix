@@ -17,9 +17,14 @@
       LC_TELEPHONE = "en_US.UTF-8";
       LC_TIME = "en_US.UTF-8";
     };
-    supportedLocales = lib.mkOptionDefault ["ja_JP.UTF-8/UTF-8"];
+    supportedLocales = lib.mkOptionDefault [
+      "ja_JP.UTF-8/UTF-8"
+      "ja_JP.EUC-JP/EUC-JP"
+
+    ];
     inputMethod = {
-      enabled = "ibus";
+      type = "ibus";
+      enable = true;
       ibus.engines = with pkgs.ibus-engines; [mozc-ut];
     };
   };

@@ -34,12 +34,13 @@ fork emacs packages on a somewhat regular basis.
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-    (url-retrieve-synchronously
-     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-     'silent 'inhibit-cookies)
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+(setq straight-built-in-pseudo-packages '(project))
 #+end_src
 
 straight-use-package is a bit of a keyful to type, especially interactively.
@@ -1017,6 +1018,11 @@ ripgrep binary, "rg" is also installed
 #+END_SRC
 
 ** Language-specific config
+*** Rust
+#+BEGIN_SRC emacs-lisp
+(sup 'rust-mode)
+(setq rust-mode-treesitter-derive t)
+#+END_SRC
 *** Java
 #+BEGIN_SRC emacs-lisp
 (sup 'meghanada)

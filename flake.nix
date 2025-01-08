@@ -28,14 +28,13 @@
           ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
           {
+            home-manager.backupFileExtension = "hm-backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.esrh = import ./home/home.nix;
           }
           {
             nixpkgs.overlays = with stephen-huan.overlays; [
-              ibus-engines
-              (final: prev: { inherit (stephen-huan.packages.${system}) mozcdic-ut; })
               sioyek
             ];
           }

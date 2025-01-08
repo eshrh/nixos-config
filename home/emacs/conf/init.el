@@ -8,12 +8,13 @@
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-    (url-retrieve-synchronously
-     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-     'silent 'inhibit-cookies)
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+(setq straight-built-in-pseudo-packages '(project))
 
 (defalias 'sup 'straight-use-package)
 
@@ -485,6 +486,9 @@ position of the outside of the paren.  Otherwise return nil."
 
 (when (executable-find "rgrep")
   (sup 'deadgrep))
+
+(sup 'rust-mode)
+(setq rust-mode-treesitter-derive t)
 
 (sup 'meghanada)
 (add-fs-to-hook 'java-mode-hook

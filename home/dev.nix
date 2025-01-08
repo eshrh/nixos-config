@@ -29,6 +29,9 @@
     pkgs.libtool
 
     pkgs.ghc
+    pkgs.stack
+    pkgs.haskellPackages.haskell-language-server
+
     pkgs.racket
   ];
 }

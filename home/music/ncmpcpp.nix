@@ -29,7 +29,6 @@
 
       { key = "8"; command = "show_visualizer"; }
       { key = "s"; command = "toggle_single"; }
-      { key = "c"; command = "toggle_consume"; }
       { key = "-"; command = "find_item_forward"; }
       { key = "_"; command = "find_item_backward"; }
     ];

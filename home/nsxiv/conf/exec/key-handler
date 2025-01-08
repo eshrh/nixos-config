@@ -1,4 +1,4 @@
-#!/usr/bin/env mts
+#!/home/esrh/prog/matsurika/build/mts
 
 (defun make-best []
   (unless (any? (map |(and

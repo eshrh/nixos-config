@@ -12,6 +12,7 @@
     pkgs.ispell
     pkgs.ncdu
     pkgs.pulseaudio  # for pactl
+    pkgs.cloudflared
 
     pkgs.neofetch
     pkgs.pywal
@@ -29,4 +30,8 @@
     pkgs.sage
     pkgs.sagetex
   ];
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 }
