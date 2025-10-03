@@ -15,6 +15,7 @@ file is updated by the website’s build script.
 Increase gc threshold. This is at the top of the file to ensure that
 it benfits startup time of stuff later on.
 #+BEGIN_SRC emacs-lisp
+;; -*- lexical-binding: t; -*-
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
 #+END_SRC
@@ -34,9 +35,9 @@ fork emacs packages on a somewhat regular basis.
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
+    (url-retrieve-synchronously
+     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+     'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -155,6 +156,25 @@ systems typically kills backward only.
 #+BEGIN_SRC emacs-lisp
 (global-set-key [?\C-z] #'kill-whole-line)
 #+END_SRC
+** C-x remap
+Important code that switches ~C-x~ and ~C-u~. This is helpful for me
+because I use dvorak, and ~C-x~ is far more common and useful compared
+te ~C-u~. This must be at the end of the file because it basically
+redefines every other command that I bound to the ~C-x~ prefix anywhere
+above.
+#+BEGIN_SRC emacs-lisp
+(define-key key-translation-map [?\C-x] [?\C-u])
+(define-key key-translation-map [?\C-u] [?\C-x])
+#+END_SRC
+
+** Tramp config
+Some tramp-specific config mainly to make it smoother/faster.
+
+#+BEGIN_SRC emacs-lisp
+(setq vc-handled-backends '(Git))
+(setq remote-file-name-inhibit-locks t)
+(setq remote-file-name-inhibit-cache nil)
+#+END_SRC
 
 * Visual configuration
 ** Disable bell
@@ -176,6 +196,7 @@ to me.
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
 (scroll-bar-mode -1)
+(setq use-dialog-box nil)
 #+END_SRC
 
 ** Better parenthesis location
@@ -217,15 +238,6 @@ position of the outside of the paren.  Otherwise return nil."
 #+BEGIN_SRC emacs-lisp
 (sup 'rainbow-mode)
 (add-hook 'prog-mode #'rainbow-mode)
-#+END_SRC
-
-** Highlight current line
-I find this very helpful not only to quickly locate the cursor, but to
-read code in general. It helps me focus, especially when stepping
-through code line by line.
-
-#+BEGIN_SRC emacs-lisp
-(global-hl-line-mode)
 #+END_SRC
 
 ** Auto whitespace cleanup
@@ -336,8 +348,6 @@ The meat of my line config.
 #+END_SRC
 
 ** Pixel scrolling
-New feature in Emacs 29! Do try it out, it's really quite neat. this
-function only activates when possible.
 #+BEGIN_SRC emacs-lisp
 (defun pixel-scroll-setup ()
   (interactive)
@@ -411,6 +421,7 @@ when you have >2 open by providing a letter hint.
 #+BEGIN_SRC emacs-lisp
 (sup 'ace-window)
 (global-set-key [remap other-window] 'ace-window)
+(global-set-key (kbd "C-x w") 'ace-swap-window)
 #+END_SRC
 
 dvorak moment
@@ -482,14 +493,12 @@ instead.
   (set-dashboard-banner "gnu.txt"))
 #+END_SRC
 
-** Company
-The one true autocompleter! Company mode takes a bit to startup, so defer.
+** Corfu
 #+BEGIN_SRC emacs-lisp
-(sup 'company)
-(add-hook 'after-init-hook #'global-company-mode)
-(sup 'company-ctags)
+(sup 'corfu)
+(setq corfu-auto t)
+(add-hook 'after-init-hook #'global-corfu-mode)
 #+END_SRC
-
 ** Projectile
 Project-aware emacs commands.
 #+BEGIN_SRC emacs-lisp
@@ -527,7 +536,6 @@ back up to the parent, not just delete one character.
 (define-key vertico-map (kbd "DEL") #'vertico-directory-delete-char)
 #+END_SRC
 
-
 *** Marginalia
 An essential addition to the completing-read buffer that offers a bit of
 documentation to entries.
@@ -557,7 +565,6 @@ this.
                        (face-attribute 'region :background)))
 #+END_SRC
 
-
 *** Orderless completion
 #+BEGIN_SRC emacs-lisp
 (sup 'orderless)
@@ -578,7 +585,7 @@ Override keybindings.
 #+BEGIN_SRC emacs-lisp
 (-map (lambda (pair) (global-set-key
                  (kbd (concat "C-x h " (car pair))) (cdr pair)))
-      (-zip '("f" "v" "k")
+      (-zip-pair '("f" "v" "k")
             '(helpful-callable helpful-variable helpful-key)))
 #+END_SRC
 
@@ -679,11 +686,13 @@ Most lisp modes inherit from lisp-data-mode. Clojure-mode does not.
 (global-hl-todo-mode)
 #+END_SRC
 
-** Which-key
-There are too many emacs keybindings and life is too short.
+*** Highlight current line
+I find this very helpful not only to quickly locate the cursor, but to
+read code in general. It helps me focus, especially when stepping
+through code line by line.
+
 #+BEGIN_SRC emacs-lisp
-(sup 'which-key)
-(which-key-mode)
+(global-hl-line-mode)
 #+END_SRC
 
 ** Terminal and shell config
@@ -759,9 +768,6 @@ Toggles a window with a re-usable vterm. Good for reducing buffer clutter.
 #+END_SRC
 
 ** Org-mode
-#+BEGIN_SRC emacs-lisp
-(sup 'org)
-#+END_SRC
 
 Path configuration. I use a directory called org in my home directory to store
 my org files.
@@ -932,11 +938,6 @@ Just works!
 (setq yas-indent-line 'fixed)
 #+END_SRC
 
-** Flycheck
-#+BEGIN_SRC emacs-lisp
-(sup 'flycheck)
-#+END_SRC
-
 ** Magit
 Nothing to be said here
 #+BEGIN_SRC emacs-lisp
@@ -992,7 +993,7 @@ eglot is built into emacs 29. install if not found.
 
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(python-ts-mode . ("pylsp"))))
+  (add-to-list 'eglot-server-programs '(python-ts-mode . ("pyright-langserver" "--stdio"))))
 (add-to-hooks #'eglot-ensure 'python-mode-hook 'python-ts-mode-hook)
 #+END_SRC
 
@@ -1013,26 +1014,17 @@ searcher. In the interest of portability, it is only installed if the
 ripgrep binary, "rg" is also installed
 
 #+BEGIN_SRC emacs-lisp
-(when (executable-find "rgrep")
+(when (executable-find "rg")
   (sup 'deadgrep))
 #+END_SRC
-
+** AI
+#+BEGIN_SRC emacs-lisp
+(sup 'gptel)
+(with-eval-after-load 'gptel
+  (setcdr (assoc 'default gptel-directives)
+          (cdr (assoc 'programming gptel-directives))))
+#+END_SRC
 ** Language-specific config
-*** Rust
-#+BEGIN_SRC emacs-lisp
-(sup 'rust-mode)
-(setq rust-mode-treesitter-derive t)
-#+END_SRC
-*** Java
-#+BEGIN_SRC emacs-lisp
-(sup 'meghanada)
-(add-fs-to-hook 'java-mode-hook
-                meghanada-mode
-                flycheck-mode
-                (setq c-basic-offset 4)
-                (setq tab-width 4))
-#+END_SRC
-
 *** Haskell
 Interactive haskell mode lets you use the nice repl with ~C-c C-z~
 #+BEGIN_SRC emacs-lisp
@@ -1045,19 +1037,17 @@ Interactive haskell error customization
 (setq haskell-interactive-popup-errors t)
 #+END_SRC
 
-*** C
+*** C-style
 #+BEGIN_SRC emacs-lisp
 (when treesit-available
   (treesit-ensure 'c)
   (treesit-ensure 'cpp)
-  (treesit-ensure 'rust)
   (add-to-list 'major-mode-remap-alist
                '(c-mode . c-ts-mode)))
 
 (setq-default c-basic-offset 4
               kill-whole-line t
               indent-tabs-mode nil)
-
 #+END_SRC
 
 *** Lisp
@@ -1136,14 +1126,14 @@ I also include some fallbacks in order of my preference.
 
 In order to add a custom tex viewing program, it must have an entry in
 TeX-view-program-list that uses some expansion tokens that you're free
-to copy from here. Some day, TODO, I'd like to get this upstreamed to
-emacs, I do believe that sioyek is sufficiently popular.
+to copy from here.
 
 #+BEGIN_SRC emacs-lisp
 (setq pdf-viewer-exec-alist '((sioyek . "Sioyek")
                               (zathura . "Zathura")
                               (evince . "evince")
                               (okular . "Okular")))
+
 (setq my-pdf-viewer (->> pdf-viewer-exec-alist
                          (-first (-compose #'executable-find #'symbol-name #'car))
                          cdr))
@@ -1162,11 +1152,48 @@ Reftex integration
 (setq reftex-plug-into-AUCTeX t)
 #+END_SRC
 
+Turn on tex-fold-mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'LaTeX-mode-hook #'TeX-fold-mode)
+#+END_SRC
+
 Make <tab> cycle sections just like in org mode
 #+BEGIN_SRC emacs-lisp
 (sup 'outline-magic)
 (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
 (add-fs-to-hook 'LaTeX-mode-hook (define-key outline-minor-mode-map (kbd "<tab>") 'outline-cycle))
+#+END_SRC
+
+**** Don't auto-fill in some environments
+#+BEGIN_SRC emacs-lisp
+(defvar my-LaTeX-no-autofill-environments
+  '("equation" "equation*", "tabular", "table")
+  "A list of LaTeX environment names in which `auto-fill-mode' should be inhibited.")
+
+(defun my-LaTeX-auto-fill-function ()
+  "This function checks whether point is currently inside one of
+the LaTeX environments listed in
+`my-LaTeX-no-autofill-environments'. If so, it inhibits automatic
+filling of the current paragraph."
+  (let ((do-auto-fill t)
+        (current-environment "")
+        (level 0))
+    (while (and do-auto-fill (not (string= current-environment "document")))
+      (setq level (1+ level)
+            current-environment (LaTeX-current-environment level)
+            do-auto-fill (not (member current-environment my-LaTeX-no-autofill-environments))))
+    (when do-auto-fill
+      (do-auto-fill))))
+
+(defun my-LaTeX-setup-auto-fill ()
+  "This function turns on auto-fill-mode and sets the function
+used to fill a paragraph to `my-LaTeX-auto-fill-function'."
+  (interactive)
+  (auto-fill-mode)
+  (setq auto-fill-function 'my-LaTeX-auto-fill-function))
+
+(add-hook 'LaTeX-mode-hook 'my-LaTeX-setup-auto-fill)
+
 #+END_SRC
 
 **** Japanese latex mode use dvipdfmx
@@ -1280,63 +1307,50 @@ Some people will call this deranged. I don't care.
                 (push '("return" . ?») prettify-symbols-alist)) ;❱)
 #+END_SRC
 
-*** Julia
-Julia-snail is a cider-flavor ide environment for julia. I find it's
-dwim send-to-repl feature nice. This package depends on both standard
-julia-mode and also vterm for its repl.
-
-#+BEGIN_SRC emacs-lisp
-(sup 'julia-snail)
-(add-hook 'julia-mode-hook #'julia-snail-mode)
-#+END_SRC
-
-*** ASM
-The default asm indentation style is completely deranged.
-#+BEGIN_SRC emacs-lisp
-(defun my-asm-mode-hook ()
-  (setq tab-always-indent (default-value 'tab-always-indent)))
-
-(add-fs-to-hook 'asm-mode-hook
-                (local-unset-key (vector asm-comment-char))
-                (setq tab-always-indent (default-value 'tab-always-indent)))
-#+END_SRC
-
 *** Other
-**** Kmonad
-Kmonad config lang. Only load when the file exists.
 #+BEGIN_SRC emacs-lisp
 (sup '(kbd-mode
        :type git
        :repo "https://github.com/kmonad/kbd-mode"))
-
 (add-hook 'kbd-mode-hook (fn (aggressive-indent-mode -1)))
-#+END_SRC
 
-**** Matsurika
-#+BEGIN_SRC emacs-lisp
+(sup 'rust-mode)
+(when treesit-available
+    (treesit-ensure 'rust)
+    (setq rust-mode-treesitter-derive t))
+
+
 (sup '(matsurika-mode
        :type git
        :host github
        :repo "eshrh/matsurika-mode"
        :files ("*.el" "docs.txt")))
-#+END_SRC
-**** Nix
-#+BEGIN_SRC emacs-lisp
+
 (sup 'nix-mode)
+
+(sup 'julia-snail)
+(add-hook 'julia-mode-hook #'julia-snail-mode)
+
+(sup 'markdown-mode)
+
+(add-fs-to-hook 'java-mode-hook
+                flycheck-mode
+                (setq c-basic-offset 4)
+                (setq tab-width 4))
+
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-hooks #'eglot-ensure 'tsx-ts-mode-hook)
+(setq js-indent-level 4)
 #+END_SRC
 
 * Other config and elisp
-** Inhibit startup screen
-#+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-screen t)
-#+END_SRC
-
 ** User information
 Add some variables that various programs, especially mail programs
 use.
 #+BEGIN_SRC emacs-lisp
 (setq user-full-name "Eshan Ramesh"
-      user-mail-address "esrh@gatech.edu")
+      user-mail-address "esrh@esrh.me")
 #+END_SRC
 
 ** Yes or no to y/n
@@ -1462,11 +1476,6 @@ Taken from here: http://blog.binchen.org/posts/what-s-the-best-spell-check-set-u
   (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
 #+END_SRC
 
-** Switch two buffers
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x w") 'ace-swap-window)
-#+END_SRC
-
 ** Function to reload init
 I make too many changes to type this out every time.
 #+BEGIN_SRC emacs-lisp
@@ -1492,21 +1501,9 @@ I make too many changes to type this out every time.
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 #+END_SRC
 
-** Spaces over tabs
-I don’t like tabs
-#+BEGIN_SRC emacs-lisp
-(setq-default indent-tabs-mode nil)
-#+END_SRC
-
 ** Final newline
 #+BEGIN_SRC emacs-lisp
 (setq mode-require-final-newline t)
-#+END_SRC
-
-** Aggressive indenting
-#+BEGIN_SRC emacs-lisp
-(sup 'aggressive-indent-mode)
-(add-hook 'lisp-data-mode-hook #'aggressive-indent-mode)
 #+END_SRC
 
 ** Scratch config
@@ -1514,22 +1511,6 @@ Set the initial mode to be lisp interaction. No default text.
 #+BEGIN_SRC emacs-lisp
 (setq initial-major-mode 'lisp-interaction-mode)
 (setq initial-scratch-message "")
-#+END_SRC
-
-** Disable dialog boxes
-#+BEGIN_SRC emacs-lisp
-(setq use-dialog-box nil)
-#+END_SRC
-
-** C-x remap
-Important code that switches ~C-x~ and ~C-u~. This is helpful for me
-because I use dvorak, and ~C-x~ is far more common and useful compared
-te ~C-u~. This must be at the end of the file because it basically
-redefines every other command that I bound to the ~C-x~ prefix anywhere
-above.
-#+BEGIN_SRC emacs-lisp
-(define-key key-translation-map [?\C-x] [?\C-u])
-(define-key key-translation-map [?\C-u] [?\C-x])
 #+END_SRC
 
 ** Don't confirm exiting when active processes exist

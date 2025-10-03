@@ -4,7 +4,7 @@ import System.Environment
 import XMonad.Util.Run (runProcessWithInput)
 import Xmobar
 
-import WeatherStem (WeatherStem(..))
+import TokyoWeather (TokyoWeather(..))
 
 main :: IO ()
 main = do
@@ -31,11 +31,11 @@ config :: Bool -> Bool -> Int -> Config
 config hasBattery hasMPD screen =
   defaultConfig
     { -- appearance
-      font = "monospace 10",
-      additionalFonts = ["IPAGothic 10"],
+      font = "monospace 15",
+      additionalFonts = ["IPAGothic 15"],
       bgColor = "#000000",
       fgColor = "#999999",
-      position = OnScreen screen Top,
+      position = OnScreen screen (TopH 30),
       border = BottomB,
       borderColor = "#ffffff",
       -- layout
@@ -45,7 +45,7 @@ config hasBattery hasMPD screen =
         "%StdinReader% " ++ (if hasBattery then "/ %battery% " else "")
           ++ "/ %multicpu% / %memory% /}{"
           ++ (if hasMPD then "%mpd% / " else "")
-          ++ "%ws% / %date%",
+          ++ "%tokyo% %date%",
       -- general behavior
       lowerOnStart = True,
       hideOnStart = False,
@@ -55,12 +55,8 @@ config hasBattery hasMPD screen =
       persistent = True,
       commands =
         -- weather monitor
-        [ Run WeatherStem,
-          Run $
-            Weather
-              "KATL"
-              [ "--template", "<skyCondition> / <fc=#83a598><tempC></fc>°c"]
-              36000,
+        [
+          Run TokyoWeather,
           Run $
             MultiCpu
               [ "--template", "cpu: <fc=#ffffff><total></fc>%"]

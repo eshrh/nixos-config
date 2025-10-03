@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
 
@@ -8,9 +9,9 @@
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
+    (url-retrieve-synchronously
+     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+     'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -67,11 +68,19 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 (global-set-key [?\C-z] #'kill-whole-line)
 
+(define-key key-translation-map [?\C-x] [?\C-u])
+(define-key key-translation-map [?\C-u] [?\C-x])
+
+(setq vc-handled-backends '(Git))
+(setq remote-file-name-inhibit-locks t)
+(setq remote-file-name-inhibit-cache nil)
+
 (setq ring-bell-function 'ignore)
 
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
 (scroll-bar-mode -1)
+(setq use-dialog-box nil)
 
 (column-number-mode)
 (show-paren-mode)
@@ -91,8 +100,6 @@ position of the outside of the paren.  Otherwise return nil."
 
 (sup 'rainbow-mode)
 (add-hook 'prog-mode #'rainbow-mode)
-
-(global-hl-line-mode)
 
 (add-fs-to-hook 'prog-mode-hook
                 (add-hook 'after-save-hook
@@ -180,6 +187,7 @@ position of the outside of the paren.  Otherwise return nil."
 
 (sup 'ace-window)
 (global-set-key [remap other-window] 'ace-window)
+(global-set-key (kbd "C-x w") 'ace-swap-window)
 
 (setq aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n ?s))
 
@@ -217,9 +225,9 @@ position of the outside of the paren.  Otherwise return nil."
     (set-dashboard-banner "hiten_render_rsz.png")
   (set-dashboard-banner "gnu.txt"))
 
-(sup 'company)
-(add-hook 'after-init-hook #'global-company-mode)
-(sup 'company-ctags)
+(sup 'corfu)
+(setq corfu-auto t)
+(add-hook 'after-init-hook #'global-corfu-mode)
 
 (sup 'projectile)
 (projectile-mode 1)
@@ -261,7 +269,7 @@ position of the outside of the paren.  Otherwise return nil."
 
 (-map (lambda (pair) (global-set-key
                  (kbd (concat "C-x h " (car pair))) (cdr pair)))
-      (-zip '("f" "v" "k")
+      (-zip-pair '("f" "v" "k")
             '(helpful-callable helpful-variable helpful-key)))
 
 (global-set-key (kbd "C-x d") #'dired-jump)
@@ -308,8 +316,7 @@ position of the outside of the paren.  Otherwise return nil."
 (sup 'hl-todo)
 (global-hl-todo-mode)
 
-(sup 'which-key)
-(which-key-mode)
+(global-hl-line-mode)
 
 (sup 'vterm)
 (sup 'fish-mode)
@@ -351,8 +358,6 @@ position of the outside of the paren.  Otherwise return nil."
 
 (meow-leader-define-key
  '("d" . vterm-toggle-cd))
-
-(sup 'org)
 
 (when (file-exists-p "~/org/")
   (setq org-directory "~/org/")
@@ -441,8 +446,6 @@ position of the outside of the paren.  Otherwise return nil."
 (yas-global-mode)
 (setq yas-indent-line 'fixed)
 
-(sup 'flycheck)
-
 (sup 'magit)
 
 (setq ediff-diff-options "")
@@ -476,7 +479,7 @@ position of the outside of the paren.  Otherwise return nil."
 
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(python-ts-mode . ("pylsp"))))
+  (add-to-list 'eglot-server-programs '(python-ts-mode . ("pyright-langserver" "--stdio"))))
 (add-to-hooks #'eglot-ensure 'python-mode-hook 'python-ts-mode-hook)
 
 (custom-set-faces
@@ -484,18 +487,13 @@ position of the outside of the paren.  Otherwise return nil."
 
 (add-fs-to-hook 'flymake-mode-hook (define-key flymake-mode-map (kbd "C-c C-n") #'flymake-goto-next-error))
 
-(when (executable-find "rgrep")
+(when (executable-find "rg")
   (sup 'deadgrep))
 
-(sup 'rust-mode)
-(setq rust-mode-treesitter-derive t)
-
-(sup 'meghanada)
-(add-fs-to-hook 'java-mode-hook
-                meghanada-mode
-                flycheck-mode
-                (setq c-basic-offset 4)
-                (setq tab-width 4))
+(sup 'gptel)
+(with-eval-after-load 'gptel
+  (setcdr (assoc 'default gptel-directives)
+          (cdr (assoc 'programming gptel-directives))))
 
 (sup 'haskell-mode)
 (add-hook 'haskell-mode-hook #'interactive-haskell-mode)
@@ -505,7 +503,6 @@ position of the outside of the paren.  Otherwise return nil."
 (when treesit-available
   (treesit-ensure 'c)
   (treesit-ensure 'cpp)
-  (treesit-ensure 'rust)
   (add-to-list 'major-mode-remap-alist
                '(c-mode . c-ts-mode)))
 
@@ -549,6 +546,7 @@ position of the outside of the paren.  Otherwise return nil."
                               (zathura . "Zathura")
                               (evince . "evince")
                               (okular . "Okular")))
+
 (setq my-pdf-viewer (->> pdf-viewer-exec-alist
                          (-first (-compose #'executable-find #'symbol-name #'car))
                          cdr))
@@ -563,9 +561,39 @@ position of the outside of the paren.  Otherwise return nil."
 (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t)
 
+(add-hook 'LaTeX-mode-hook #'TeX-fold-mode)
+
 (sup 'outline-magic)
 (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
 (add-fs-to-hook 'LaTeX-mode-hook (define-key outline-minor-mode-map (kbd "<tab>") 'outline-cycle))
+
+(defvar my-LaTeX-no-autofill-environments
+  '("equation" "equation*", "tabular", "table")
+  "A list of LaTeX environment names in which `auto-fill-mode' should be inhibited.")
+
+(defun my-LaTeX-auto-fill-function ()
+  "This function checks whether point is currently inside one of
+the LaTeX environments listed in
+`my-LaTeX-no-autofill-environments'. If so, it inhibits automatic
+filling of the current paragraph."
+  (let ((do-auto-fill t)
+        (current-environment "")
+        (level 0))
+    (while (and do-auto-fill (not (string= current-environment "document")))
+      (setq level (1+ level)
+            current-environment (LaTeX-current-environment level)
+            do-auto-fill (not (member current-environment my-LaTeX-no-autofill-environments))))
+    (when do-auto-fill
+      (do-auto-fill))))
+
+(defun my-LaTeX-setup-auto-fill ()
+  "This function turns on auto-fill-mode and sets the function
+used to fill a paragraph to `my-LaTeX-auto-fill-function'."
+  (interactive)
+  (auto-fill-mode)
+  (setq auto-fill-function 'my-LaTeX-auto-fill-function))
+
+(add-hook 'LaTeX-mode-hook 'my-LaTeX-setup-auto-fill)
 
 (advice-add #'japanese-latex-mode :after
             (lambda () (setq TeX-PDF-from-DVI "Dvipdfmx")))
@@ -638,21 +666,16 @@ position of the outside of the paren.  Otherwise return nil."
                 (push '("None" . ?∅) prettify-symbols-alist)
                 (push '("return" . ?») prettify-symbols-alist)) ;❱)
 
-(sup 'julia-snail)
-(add-hook 'julia-mode-hook #'julia-snail-mode)
-
-(defun my-asm-mode-hook ()
-  (setq tab-always-indent (default-value 'tab-always-indent)))
-
-(add-fs-to-hook 'asm-mode-hook
-                (local-unset-key (vector asm-comment-char))
-                (setq tab-always-indent (default-value 'tab-always-indent)))
-
 (sup '(kbd-mode
        :type git
        :repo "https://github.com/kmonad/kbd-mode"))
-
 (add-hook 'kbd-mode-hook (fn (aggressive-indent-mode -1)))
+
+(sup 'rust-mode)
+(when treesit-available
+    (treesit-ensure 'rust)
+    (setq rust-mode-treesitter-derive t))
+
 
 (sup '(matsurika-mode
        :type git
@@ -662,10 +685,23 @@ position of the outside of the paren.  Otherwise return nil."
 
 (sup 'nix-mode)
 
-(setq inhibit-startup-screen t)
+(sup 'julia-snail)
+(add-hook 'julia-mode-hook #'julia-snail-mode)
+
+(sup 'markdown-mode)
+
+(add-fs-to-hook 'java-mode-hook
+                flycheck-mode
+                (setq c-basic-offset 4)
+                (setq tab-width 4))
+
+
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+(add-to-hooks #'eglot-ensure 'tsx-ts-mode-hook)
+(setq js-indent-level 4)
 
 (setq user-full-name "Eshan Ramesh"
-      user-mail-address "esrh@gatech.edu")
+      user-mail-address "esrh@esrh.me")
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -741,8 +777,6 @@ position of the outside of the paren.  Otherwise return nil."
   ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
   (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
 
-(global-set-key (kbd "C-x w") 'ace-swap-window)
-
 (defun load-init ()
   (interactive)
   (load-file (expand-file-name "init.el" user-emacs-directory)))
@@ -758,20 +792,10 @@ position of the outside of the paren.  Otherwise return nil."
   (interactive)
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
-(setq-default indent-tabs-mode nil)
-
 (setq mode-require-final-newline t)
-
-(sup 'aggressive-indent-mode)
-(add-hook 'lisp-data-mode-hook #'aggressive-indent-mode)
 
 (setq initial-major-mode 'lisp-interaction-mode)
 (setq initial-scratch-message "")
-
-(setq use-dialog-box nil)
-
-(define-key key-translation-map [?\C-x] [?\C-u])
-(define-key key-translation-map [?\C-u] [?\C-x])
 
 (setq confirm-kill-processes nil)
 

@@ -16,7 +16,7 @@
       }) ''
         # FIXME: proper paths
         cp ${./conf/xmobar.hs} xmobar.hs
-        cp ${./conf/WeatherStem.hs} WeatherStem.hs
+        cp ${./conf/TokyoWeather.hs} TokyoWeather.hs
 
         ghc --make -threaded xmobar.hs
 
