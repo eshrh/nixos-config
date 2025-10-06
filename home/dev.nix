@@ -17,9 +17,6 @@
       python-pkgs.pylsp-mypy
       python-pkgs.pylsp-rope
 
-      python-pkgs.tensorflow-bin
-      python-pkgs.torch
-      python-pkgs.torchvision
       python-pkgs.jax
       python-pkgs.jaxlib
 

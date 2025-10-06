@@ -25,7 +25,7 @@
     inputMethod = {
       type = "ibus";
       enable = true;
-      ibus.engines = with pkgs.ibus-engines; [mozc-ut];
+      ibus.engines = with pkgs.ibus-engines; [mozc-ut rime];
     };
   };
 

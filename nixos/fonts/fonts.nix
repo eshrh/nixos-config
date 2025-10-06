@@ -7,6 +7,7 @@
   fonts = {
     packages = with pkgs; [
       noto-fonts
+      noto-fonts-cjk-sans
       noto-fonts-emoji
       ipafont
       iosevka-meiseki # from ./iosevka.nix, custom iosevka build

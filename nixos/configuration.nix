@@ -39,6 +39,8 @@
     emacs
     git
     wine
+    wine64
+    wineWowPackages.stable
     winetricks
     winePackages.stableFull
     lutris

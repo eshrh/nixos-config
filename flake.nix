@@ -33,11 +33,6 @@
             home-manager.useUserPackages = true;
             home-manager.users.esrh = import ./home/home.nix;
           }
-          {
-            nixpkgs.overlays = with stephen-huan.overlays; [
-              sioyek
-            ];
-          }
         ];
       };
     };
