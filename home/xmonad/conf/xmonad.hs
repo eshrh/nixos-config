@@ -7,7 +7,7 @@
 {-# HLINT ignore "Use lambda-case" #-}
 
 import System.Exit (exitSuccess)
-import Control.Monad (ap, forM_, (<=<))
+import Control.Monad (ap, forM_, (<=<), when)
 import Control.Monad.Extra (orM, findM)
 import Data.Bifunctor
 import Data.Functor
@@ -22,11 +22,11 @@ import GHC.IO.Handle
 
 import XMonad
 import XMonad.Actions.CycleWS
-import XMonad.Actions.GridSelect
+import XMonad.Actions.CopyWindow
 import XMonad.Actions.GroupNavigation
 import XMonad.Actions.MouseGestures
+import XMonad.Layout.NoBorders
 import XMonad.Actions.OnScreen
-import qualified XMonad.Actions.TreeSelect as TS
 import XMonad.Config.Dmwit (outputOf)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -53,7 +53,6 @@ commandKeys =
     ("M-f", withFocused toggleFloat),
     ("M-.", sendMessage (IncMasterN 1)),
     ("M-,", sendMessage (IncMasterN (-1))),
-    ("M-u", TS.treeselectWorkspace tsconf jpWorkspaces W.greedyView),
     ("M-S-p", sendMessage FirstLayout),
     ("M-S-h", windows W.swapDown),
     ("M-S-t", windows W.swapUp),
@@ -75,7 +74,6 @@ commandKeys =
     ("M-S-y", spawn "thunderbird"),
     ("M-S-,", spawn "ames -w"),
     ("M-S-.", spawn "ames -r"),
-    ("M-<Escape>", spawn "i3lock"),
     ("M-S-s", spawn "scrot -s")
   ]
 
@@ -163,7 +161,7 @@ mkScratchpadFromProgram name binary =
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
-  map mkScratchpadFromTerm ["htop", "ncmpcpp", "pulsemixer"]
+  map mkScratchpadFromTerm ["htop", "inori", "pulsemixer"]
     ++ [mkScratchpadFromProgram "qBittorrent" "qbittorrent"]
 
 titleContainsString :: String -> Query Bool
@@ -254,10 +252,11 @@ gestures =
       ([R], \w -> focus w >> shiftNextScreen),
       ([L], \w -> focus w >> shiftPrevScreen),
       ([D], toggleFloat),
+      ([U], const toggleFullscreen),
       ([U, L], const shiftToPrev),
       ([U, R], const shiftToNext),
-      ([D, R], const (sendMessage NextLayout)),
-      ([U], const toggleFullscreen)
+      ([U, D], const $ windows copyToAll ),
+      ([D, U], const killAllOtherCopies)
     ]
 
 mouseControls :: XConfig m -> M.Map (ButtonMask, Button) WindowAction
@@ -277,41 +276,10 @@ mouseControls (XConfig {XMonad.modMask = modm}) =
       ((modm, 3), mouseGesture gestures)
     ]
 
-jpWorkspaces :: Forest String
-jpWorkspaces =
-  map
-    (`Node` [])
-    wksp
-
-
-tsnav =
-  M.fromList
-    [ ((0, xK_Escape), TS.cancel),
-      ((0, xK_Return), TS.select),
-      ((controlMask, xK_p), TS.movePrev),
-      ((controlMask, xK_n), TS.moveNext),
-      ((0, xK_d), TS.moveParent),
-      ((0, xK_n), TS.moveChild),
-      ((0, xK_h), TS.moveNext),
-      ((0, xK_t), TS.movePrev)
-    ]
-
-tsconf :: TS.TSConfig a
-tsconf =
-  def
-    { TS.ts_background = 0xc0c0c0c0,
-      TS.ts_node = (0xff000000, 0xc0c0c0c0),
-      TS.ts_nodealt = (0xff000000, 0xc0c0c0c0),
-      TS.ts_highlight = (0xffffffff, 0xff000000),
-      TS.ts_extra = 0xff000000,
-      TS.ts_node_width = 40,
-      TS.ts_navigate = tsnav
-    }
-
 ------------------------------------------------------------------------
 
 layout =
-  renamed [CutWordsLeft 1] $ spacing 10 $ tiled ||| Full
+  renamed [CutWordsLeft 1] $ spacing 10 $ tiled ||| noBorders Full
   where
     tiled = Tall 1 (3 / 100) (1 / 2)
 
@@ -346,8 +314,6 @@ fg color = xmobarColor color ""
 stdColor :: String -> String
 stdColor = fg "#ffffff"
 
-focusColor = stdColor
-
 ppTitleFunc :: String -> String
 ppTitleFunc = stdColor . shorten 50 . replaceAll
 
@@ -364,8 +330,8 @@ ppFunc xmhandles =
     (dynamicLogWithPP . namedScratchpadFilterOutWorkspacePP)
       xmobarPP
         { ppOutput = \x -> mapM_ (`hPutStrLn` x) xmhandles,
-          ppCurrent = focusColor . wrap "[" "]",
-          ppVisible = focusColor . wrap "(" ")",
+          ppCurrent = stdColor . wrap "[" "]",
+          ppVisible = stdColor . wrap "(" ")",
           ppHidden = fg "#999999" . wrap "{" "}",
           ppHiddenNoWindows = fg "#666666" . wrap "(" ")",
           ppTitle = ppTitleFunc,
@@ -384,10 +350,7 @@ main = do
     outputOf
       "xrandr --listactivemonitors 2>/dev/null | awk '{print $1 $4}'"
 
-  if null $ lines output
-    then do putStrLn "No displays"
-            exitSuccess
-    else return ()
+  when (null $ lines output) $ putStrLn "No displays" >> exitSuccess
 
   -- parse into [(index, name)]
   let monitors =
@@ -407,7 +370,7 @@ main = do
             clickJustFocuses = False,
             borderWidth = 1,
             modMask = mod1Mask,
-            workspaces = TS.toWorkspaces jpWorkspaces,
+            workspaces = wksp,
             normalBorderColor = "#646464",
             focusedBorderColor = "#fdbcb4",
             keys = windowKeys (length monitors) flippedkeys,
