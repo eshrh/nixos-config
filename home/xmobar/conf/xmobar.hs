@@ -3,8 +3,10 @@
 import System.Environment
 import XMonad.Util.Run (runProcessWithInput)
 import Xmobar
-
 import TokyoWeather (TokyoWeather(..))
+import Data.List
+import Data.List.Split (chunksOf)
+import Data.Maybe (fromMaybe)
 
 main :: IO ()
 main = do
@@ -15,11 +17,12 @@ main = do
   let hasMPD = not $ null mpdOut
 
   args <- getArgs
-  let screen = case args of
-        ["-x", n] -> read n
-        _ -> 0
+  let args_chunks = zip args (drop 1 args)
+  let screen = fromMaybe "0" $ lookup "-x" args_chunks
+  let fgcolor = fromMaybe "#ebdbb2" $ lookup "-F" args_chunks
+  let bgcolor = fromMaybe "#1d2021" $ lookup "-B" args_chunks
 
-  xmobar $ config hasBattery hasMPD screen
+  xmobar $ config fgcolor bgcolor hasBattery hasMPD (read screen)
 
 outputOf :: String -> IO String
 outputOf input = runProcessWithInput prog args ""
@@ -27,17 +30,16 @@ outputOf input = runProcessWithInput prog args ""
     prog = (head . words) input
     args = (tail . words) input
 
-config :: Bool -> Bool -> Int -> Config
-config hasBattery hasMPD screen =
+config :: String -> String -> Bool -> Bool -> Int -> Config
+config fgcolor bgcolor hasBattery hasMPD screen =
   defaultConfig
     { -- appearance
-      font = "monospace 15",
-      additionalFonts = ["IPAGothic 15"],
-      bgColor = "#000000",
-      fgColor = "#999999",
-      position = OnScreen screen (TopH 30),
+      font = "monospace 16",
+      bgColor = bgcolor,
+      fgColor = fgcolor,
+      position = OnScreen screen (TopH 40),
       border = BottomB,
-      borderColor = "#ffffff",
+      borderColor = fgcolor,
       -- layout
       sepChar = "%",
       alignSep = "}{",
@@ -59,14 +61,14 @@ config hasBattery hasMPD screen =
           Run TokyoWeather,
           Run $
             MultiCpu
-              [ "--template", "cpu: <fc=#ffffff><total></fc>%"]
+              [ "--template", "cpu: <total>%"]
               10,
           Run $
             Memory
-              [ "--template", "mem: <fc=#ffffff><usedratio></fc>%"
+              [ "--template", "mem: <usedratio>%"
               ]
               10,
-          Run $ Date "<fc=#ffffff>%b-%d %H:%M</fc>" "date" 10,
+          Run $ Date "%b-%d %H:%M" "date" 10,
           Run StdinReader
         ]
           ++ [ Run $
@@ -74,21 +76,23 @@ config hasBattery hasMPD screen =
                    ["BAT0"]
                    [ "-t", "<acstatus> (<left>%)",
                      "--",
-                     "-O", "<fc=green>On</fc> - ",
+                     "-O", "<fc=#8ec07a>Charging</fc>",
+                     "-i", "<fc=#83a598>Idle</fc>",
+                     "-o", "<fc=#fb4934>Discharging</fc>",
                      "-a", "notify-send -u critical 'battery low'",
-                     "-A", "3"
+                     "-A", "10"
                    ]
                    600
                | hasBattery
              ]
           ++ [ Run $
                  MPD
-                   [ "-t", "<fc=#ffffff> <artist> - <title> (<album>) <statei> </fc>",
+                   [ "-t", "<fc=#fabd2f> <artist> - <title> (<album>) <statei> </fc>",
                      "-M", "30",
                      "--",
-                     "-P", ">>",
-                     "-Z", "||",
-                     "-S", "<<",
+                     "-P", "▶",
+                     "-Z", "⏸",
+                     "-S", "⏹",
                      "-p", "6600",
                      "-h", "127.0.0.1"
                    ] 10

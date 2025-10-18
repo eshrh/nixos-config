@@ -6,36 +6,37 @@
 
 {-# HLINT ignore "Use lambda-case" #-}
 
-import System.Exit (exitSuccess)
-import Control.Monad (ap, forM_, (<=<), when)
-import Control.Monad.Extra (orM, findM)
+import Control.Monad (ap, forM_, when, (<=<))
+import Control.Monad.Extra (findM, orM)
 import Data.Bifunctor
-import Data.Functor
-import Data.Foldable (asum)
 import Data.Char (isSpace)
 import Data.Default
-import Data.List
+import Data.Foldable (asum)
+import Data.Functor
+import Data.List qualified as L
 import Data.List.Split (chunksOf)
-import qualified Data.Map as M
+import Data.Map qualified as M
 import Data.Tree
 import GHC.IO.Handle
-
+import System.Exit (exitSuccess)
 import XMonad
+import XMonad.Actions.CopyWindow (killAllOtherCopies)
 import XMonad.Actions.CycleWS
-import XMonad.Actions.CopyWindow
 import XMonad.Actions.GroupNavigation
 import XMonad.Actions.MouseGestures
-import XMonad.Layout.NoBorders
 import XMonad.Actions.OnScreen
 import XMonad.Config.Dmwit (outputOf)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed
 import XMonad.Layout.Spacing
 import XMonad.Prompt
 import XMonad.Prompt.Shell
-import qualified XMonad.StackSet as W
+import XMonad.Prompt.XMonad
+import XMonad.StackSet qualified as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.NamedWindows
@@ -51,9 +52,6 @@ commandKeys =
     ("M-[", sendMessage Shrink),
     ("M-]", sendMessage Expand),
     ("M-f", withFocused toggleFloat),
-    ("M-.", sendMessage (IncMasterN 1)),
-    ("M-,", sendMessage (IncMasterN (-1))),
-    ("M-S-p", sendMessage FirstLayout),
     ("M-S-h", windows W.swapDown),
     ("M-S-t", windows W.swapUp),
     ("M-s", windows W.swapMaster),
@@ -71,10 +69,9 @@ commandKeys =
     ("M-S-q", spawn "xmonad --recompile && xmonad --restart"),
     ("M-<Return>", spawn "alacritty"),
     ("M-S-u", spawn "firefox"),
-    ("M-S-y", spawn "thunderbird"),
     ("M-S-,", spawn "ames -w"),
     ("M-S-.", spawn "ames -r"),
-    ("M-S-s", spawn "scrot -s")
+    ("M-S-a", spawn "scrot -s")
   ]
 
 type WindowAction = Window -> X ()
@@ -94,12 +91,15 @@ toggleFloat w =
     )
 
 type StackOp i l a s sd = i -> W.StackSet i l a s sd -> W.StackSet i l a s sd
+
 type KeyMap = [(KeyBind, X ())]
 
 -- compile time guarantee that (length wksp) = (length numberKeys)
 keysToWorkspaces :: [(KeySym, String)]
-keysToWorkspaces = zip ([xK_1 .. xK_9] ++ [xK_0])
-  ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
+keysToWorkspaces =
+  zip
+    ([xK_1 .. xK_9] ++ [xK_0])
+    ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
 
 numberKeys :: [KeySym]
 numberKeys = map fst keysToWorkspaces
@@ -107,6 +107,9 @@ numberKeys = map fst keysToWorkspaces
 wksp :: [String]
 wksp = map snd keysToWorkspaces
 
+-- Divide the 10 workspace keys evenly across all screens
+-- Requires recompilation to change `flipped` if the screens are not
+-- ordered left to right.
 keyGen ::
   (Ord a, Eq s, Eq i) =>
   KeyMask ->
@@ -123,29 +126,24 @@ keyGen modm comb objects action =
 windowKeys :: Int -> Bool -> XConfig m -> M.Map KeyBind (X ())
 windowKeys nmonitors flipped (XConfig {XMonad.modMask = modm}) =
   M.fromList $
-   wkspKeys modm nmonitors flipped
-  ++ keyGen modm applyScreenFunction objects W.view
+    wkspKeys modm nmonitors flipped
+      ++ keyGen modm applyScreenFunction objects W.view
   where
     applyScreenFunction f sc = screenWorkspace sc >>= flip whenJust (windows . f)
     objects = zip ((if flipped then reverse else id) [xK_d, xK_n]) [0, 1]
 
 wkspKeys :: KeyMask -> Int -> Bool -> KeyMap
 wkspKeys modm nmonitors flipped =
-  concat $ zipWith (makeKeys modm) chunks [0..nmonitors - 1]
+  concat $ zipWith (makeKeys modm) chunks [0 .. nmonitors - 1]
   where
-    chunks = (if flipped then reverse else id) $
-      chunksOf (div (length wksp) nmonitors) keysToWorkspaces
+    chunks =
+      (if flipped then reverse else id) $
+        chunksOf (div (length wksp) nmonitors) keysToWorkspaces
     makeKeys modm chunk screen =
       keyGen modm (\f i -> windows $ f i) chunk (viewOnScreen (S screen))
 
-
 ------------------------------------------------------------------------
 -- Scratchpads
-
-scratchpadLayout :: ManageHook
-scratchpadLayout =
-  customFloating $
-    W.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
 
 mkScratchpadFromTerm :: String -> NamedScratchpad
 mkScratchpadFromTerm name =
@@ -153,11 +151,11 @@ mkScratchpadFromTerm name =
     name
     ("alacritty --title '" ++ name ++ "' -e " ++ name)
     (title =? name)
-    scratchpadLayout
+    (customFloating floatDimensions)
 
 mkScratchpadFromProgram :: String -> String -> NamedScratchpad
 mkScratchpadFromProgram name binary =
-  NS name binary (titleContainsString name) scratchpadLayout
+  NS name binary (titleContainsString name) (customFloating floatDimensions)
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
@@ -165,7 +163,7 @@ scratchpads =
     ++ [mkScratchpadFromProgram "qBittorrent" "qbittorrent"]
 
 titleContainsString :: String -> Query Bool
-titleContainsString = (title <&>) . isInfixOf
+titleContainsString = (title <&>) . L.isInfixOf
 
 scratchpadNames :: [String]
 scratchpadNames = map (\(NS n _ _ _) -> n) scratchpads
@@ -174,6 +172,7 @@ toggleScratchpad :: String -> X ()
 toggleScratchpad = namedScratchpadAction scratchpads
 
 data Scratch = Scratch
+
 instance XPrompt Scratch where
   showXPrompt Scratch = "scratchpad: "
 
@@ -228,14 +227,51 @@ xpkeymap p =
 promptConf :: XPConfig
 promptConf =
   def
-    { alwaysHighlight = True,
-      height = 30,
-      promptBorderWidth = 0,
-      historySize = 256,
+    { height = 50,
+      bgColor = "#1d2021",
+      fgColor = "#fbf1c7",
+      fgHLight = "#1d2021",
+      bgHLight = "#fbf1c7",
+      borderColor = "#fbf1c7",
+      promptBorderWidth = 2,
       promptKeymap = xpkeymap isSpace,
+      alwaysHighlight = True,
+      historySize = 256,
       maxComplRows = Just 3,
       autoComplete = Just 0
     }
+
+
+------------------------------------------------------------------------
+-- Custom copy-to-all functions
+
+-- The copyToAll' function from Actions.CopyWindow inserts the target window
+-- as the focus element of each stack. I don't think like it.
+
+copy' :: (Eq s, Eq i, Eq a) => i -> W.StackSet i l a s sd -> W.StackSet i l a s sd
+copy' n s
+  | Just w <- W.peek s = copyWindow' w n s
+  | otherwise = s
+
+copyToAll' :: (Eq s, Eq i, Eq a) => W.StackSet i l a s sd -> W.StackSet i l a s sd
+copyToAll' s = foldr (copy' . W.tag) s (W.workspaces s)
+
+-- Inserts into stack without changing focus.
+copyWindow' :: (Eq a, Eq i, Eq s) => a -> i -> W.StackSet i l a s sd -> W.StackSet i l a s sd
+copyWindow' w n = copy'
+  where
+    copy' s =
+      if n `W.tagMember` s
+        then W.view (W.currentTag s) $ insertUp' w $ W.view n s
+        else s
+    insertUp' a =
+      W.modify
+        (Just $ W.Stack a [] [])
+        ( \(W.Stack t l r) ->
+            if a `elem` t : l ++ r
+              then Just $ W.Stack t l r
+              else Just $ W.Stack t (L.delete a l) (a : r)
+        )
 
 ------------------------------------------------------------------------
 -- Mouse gestures
@@ -255,9 +291,10 @@ gestures =
       ([U], const toggleFullscreen),
       ([U, L], const shiftToPrev),
       ([U, R], const shiftToNext),
-      ([U, D], const $ windows copyToAll ),
+      ([U, D], const $ windows copyToAll'),
       ([D, U], const killAllOtherCopies)
     ]
+
 
 mouseControls :: XConfig m -> M.Map (ButtonMask, Button) WindowAction
 mouseControls (XConfig {XMonad.modMask = modm}) =
@@ -265,12 +302,14 @@ mouseControls (XConfig {XMonad.modMask = modm}) =
     -- mod-button1, Set the window to floating mode and move by dragging
     [ ( (modm, button1),
         \w ->
-          focus w >> mouseMoveWindow w
+          focus w
+            >> mouseMoveWindow w
             >> windows W.shiftMaster
       ),
       ( (modm, button2),
         \w ->
-          focus w >> mouseResizeWindow w
+          focus w
+            >> mouseResizeWindow w
             >> windows W.shiftMaster
       ),
       ((modm, 3), mouseGesture gestures)
@@ -283,10 +322,14 @@ layout =
   where
     tiled = Tall 1 (3 / 100) (1 / 2)
 
-floatingWindowManageHook :: ManageHook
-floatingWindowManageHook =
-  composeAll
-    [className =? "Gimp" --> doFloat]
+-- Float PIP in the corner of all wksps
+firefoxPIPHook :: ManageHook
+firefoxPIPHook =
+  (title =? "Picture-in-Picture")
+    <&&> (appName =? "Toolkit")
+    <&&> (className =? "firefox")
+    --> doRectFloat (W.RationalRect (5 / 6) (5 / 6) (1 / 6) (1 / 6))
+    <+> doF copyToAll'
 
 replace :: String -> String -> String -> String
 replace _ _ "" = ""
@@ -311,13 +354,6 @@ replaceAll s = foldl (flip (uncurry replace)) s replaceList
 fg :: String -> (String -> String)
 fg color = xmobarColor color ""
 
-stdColor :: String -> String
-stdColor = fg "#ffffff"
-
-ppTitleFunc :: String -> String
-ppTitleFunc = stdColor . shorten 50 . replaceAll
-
--- pretty print layout names
 layoutDispatch :: String -> String
 layoutDispatch layout = case layout of
   "Tall" -> "[||]"
@@ -330,19 +366,19 @@ ppFunc xmhandles =
     (dynamicLogWithPP . namedScratchpadFilterOutWorkspacePP)
       xmobarPP
         { ppOutput = \x -> mapM_ (`hPutStrLn` x) xmhandles,
-          ppCurrent = stdColor . wrap "[" "]",
-          ppVisible = stdColor . wrap "(" ")",
-          ppHidden = fg "#999999" . wrap "{" "}",
-          ppHiddenNoWindows = fg "#666666" . wrap "(" ")",
-          ppTitle = ppTitleFunc,
-          ppSep = "<fc=#ffffff> / </fc>",
-          ppUrgent = fg "#ffffff" . wrap "!" "!",
-          ppLayout = xmobarColor "#ffffff" "" . layoutDispatch,
+          ppCurrent = wrap "[" "]",
+          ppVisible = fg "#928374" . wrap "(" ")",
+          ppHidden = fg "#928374" . wrap "{" "}",
+          ppHiddenNoWindows = fg "#665c54" . wrap "(" ")",
+          ppTitle = fg "#fabd2f". shorten 50 . replaceAll,
+          ppSep = " / ",
+          ppUrgent = wrap "!" "!",
+          ppLayout = layoutDispatch,
           ppOrder = \(ws : l : t : ex) -> [ws, l] ++ ex ++ [t]
         }
 
 trims :: String -> String
-trims = dropWhileEnd isSpace . dropWhile isSpace
+trims = L.dropWhileEnd isSpace . dropWhile isSpace
 
 main :: IO ()
 main = do
@@ -359,7 +395,7 @@ main = do
           ((tail . lines) output)
 
   -- spawn an xmobar for every screen
-  xmhandles <- mapM (\(i, _) -> spawnPipe ("xmobar -x " ++ i)) monitors
+  xmhandles <- mapM (\(i, _) -> spawnPipe ("xmobar -x " ++ i ++ " -F \"#fbf1c7\" -B \"#1d2021\"")) monitors
 
   let flippedkeys = False
   xmonad $
@@ -368,17 +404,17 @@ main = do
         def
           { focusFollowsMouse = True,
             clickJustFocuses = False,
-            borderWidth = 1,
+            borderWidth = 4,
             modMask = mod1Mask,
             workspaces = wksp,
-            normalBorderColor = "#646464",
-            focusedBorderColor = "#fdbcb4",
+            normalBorderColor = "#32302f",
+            focusedBorderColor = "#458588",
             keys = windowKeys (length monitors) flippedkeys,
             mouseBindings = mouseControls,
             layoutHook = avoidStruts layout,
             logHook = ppFunc xmhandles,
             manageHook =
-              floatingWindowManageHook
+              firefoxPIPHook
                 <+> manageDocks
                 <+> namedScratchpadManageHook scratchpads,
             handleEventHook = ewmhDesktopsEventHook,
