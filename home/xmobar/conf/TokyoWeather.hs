@@ -97,16 +97,16 @@ getData = do
   return $ maybe "Failure" printer d
 
 tempPrinter :: (Int, Int) -> String
-tempPrinter (l, h) = show l ++ "-" ++ show h ++ "°c"
+tempPrinter (l, h) = "[" ++ show l ++ ", " ++ show h ++ "]°C"
 
 addColor :: String -> String -> String
 addColor color string = "<fc=" ++ color ++ ">" ++ string ++ "</fc>"
 
 popsPrinter :: Int -> String
-popsPrinter p = (if p > 40 then addColor "#6bd7ff" else id) $ show p ++ "%"
+popsPrinter p = (if p > 40 then addColor "#6bd7ff" else id) $ show p ++ "%" ++ (if p > 40 then "雨" else "")
 
 printer :: WeatherData -> String
-printer w = weather w ++ " / " ++ winds w ++ " / " ++ popsPrinter (pops w) ++ " / " ++ tempPrinter (temps w) ++ " /"
+printer w = weather w ++ " / " ++ (head . words . winds) w ++ " / " ++ popsPrinter (pops w) ++ " / " ++ tempPrinter (temps w) ++ " /"
 
 data TokyoWeather = TokyoWeather
   deriving (Read, Show)
