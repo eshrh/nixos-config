@@ -15,8 +15,9 @@
     pkgs.zoom-us
     pkgs.xournalpp
   ];
-  programs = {
-    alacritty.enable = true;
-    firefox.enable = true;
+  programs.alacritty = {
+    enable = true;
+    settings.font.size = 8;
   };
+  programs.firefox.enable = true;
 }

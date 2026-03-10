@@ -2,6 +2,8 @@
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
 
+(setq native-comp-async-report-warnings-errors nil)
+
 (setq straight-check-for-modifications nil)
 (defvar bootstrap-version)
 (let ((bootstrap-file

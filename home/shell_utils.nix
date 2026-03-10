@@ -45,7 +45,7 @@
   '';
   programs.git = {
     enable = true;
-    user.name = "eshrh";
-    user.email = "esrh@esrh.me";
+    settings.user.name = "eshrh";
+    settings.user.email = "esrh@esrh.me";
   };
 }
