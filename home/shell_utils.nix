@@ -5,6 +5,7 @@
     pkgs.jq
     pkgs.pandoc
     pkgs.ripgrep
+    pkgs.eza
     pkgs.zoxide
     pkgs.zip
     pkgs.unzip

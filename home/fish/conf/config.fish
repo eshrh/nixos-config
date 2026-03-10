@@ -1,11 +1,7 @@
 if status is-interactive
     set -g fish_greeting
-    if test -e ~/.cache/wal/sequences
-        cat ~/.cache/wal/sequences &
-    end
+    alias ls=eza
 end
-
-set fish_command_timer_enabled 0
 
 # Some of the most useful features in emacs-libvterm require shell-side
 # configurations. The main goal of these additional functions is to enable the
