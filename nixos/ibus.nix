@@ -20,7 +20,6 @@
     supportedLocales = lib.mkOptionDefault [
       "ja_JP.UTF-8/UTF-8"
       "ja_JP.EUC-JP/EUC-JP"
-
     ];
     inputMethod = {
       type = "ibus";

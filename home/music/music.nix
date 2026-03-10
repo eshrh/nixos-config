@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: {
-  home.packages = [pkgs.mpc-cli];
+  home.packages = [pkgs.mpc];
   programs.inori = {
     enable = true;
     settings.dvorak_keybindings = true;
@@ -20,26 +20,26 @@
       startWhenNeeded = true;
     };
     extraConfig = ''
-    audio_output {
-        type      "httpd"
-        name      "net_music"
-        encoder   "vorbis"
-        port      "8000"
-        bitrate   "128"
-        format    "44100:16:1"
-        always_on "no"
-        tags      "yes"
-    }
-    audio_output {
-        type      "pulse"
-        name      "pulse audio"
-    }
-    audio_output {
-        type      "fifo"
-        name      "my_fifo"
-        path      "/tmp/mpd.fifo"
-        format    "44100:16:2"
-    }
+      audio_output {
+          type      "httpd"
+          name      "net_music"
+          encoder   "vorbis"
+          port      "8000"
+          bitrate   "128"
+          format    "44100:16:1"
+          always_on "no"
+          tags      "yes"
+      }
+      audio_output {
+          type      "pulse"
+          name      "pulse audio"
+      }
+      audio_output {
+          type      "fifo"
+          name      "my_fifo"
+          path      "/tmp/mpd.fifo"
+          format    "44100:16:2"
+      }
     '';
   };
   programs.beets = {

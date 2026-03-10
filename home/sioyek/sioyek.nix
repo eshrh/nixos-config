@@ -12,6 +12,6 @@
   };
   xdg.mimeApps.enable = true;
   xdg.mimeApps.defaultApplications = {
-    "application/pdf" = [ "sioyek.desktop" ];
+    "application/pdf" = ["sioyek.desktop"];
   };
 }

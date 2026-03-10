@@ -1,5 +1,4 @@
-{pkgs, ...}:
-{
+{pkgs, ...}: {
   home.packages = [
     pkgs.android-tools
     pkgs.anki

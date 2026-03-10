@@ -5,17 +5,15 @@
     pkgs.jq
     pkgs.pandoc
     pkgs.ripgrep
-    pkgs.killall
     pkgs.zoxide
     pkgs.zip
     pkgs.unzip
     pkgs.ispell
     pkgs.ncdu
-    pkgs.pulseaudio  # for pactl
+    pkgs.pulseaudio # for pactl
     pkgs.pulsemixer
-    pkgs.cloudflared
 
-    pkgs.neofetch
+    pkgs.fastfetch
     pkgs.pywal
     pkgs.ffmpeg
     pkgs.mpv
@@ -46,7 +44,7 @@
   '';
   programs.git = {
     enable = true;
-    userName  = "eshrh";
-    userEmail = "esrh@esrh.me";
+    user.name = "eshrh";
+    user.email = "esrh@esrh.me";
   };
 }

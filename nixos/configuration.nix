@@ -40,7 +40,7 @@
     git
     wine
     wine64
-    wineWowPackages.stable
+    wineWow64Packages.stable
     winetricks
     winePackages.stableFull
   ];
