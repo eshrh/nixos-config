@@ -34,10 +34,10 @@ config :: String -> String -> Bool -> Bool -> Int -> Config
 config fgcolor bgcolor hasBattery hasMPD screen =
   defaultConfig
     { -- appearance
-      font = "monospace 16",
+      font = "monospace 12",
       bgColor = bgcolor,
       fgColor = fgcolor,
-      position = OnScreen screen (TopH 40),
+      position = OnScreen screen (TopH 35),
       border = BottomB,
       borderColor = fgcolor,
       -- layout
