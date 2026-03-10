@@ -30,5 +30,8 @@
     pkgs.haskellPackages.haskell-language-server
 
     pkgs.racket
+
+    pkgs.cargo
+    pkgs.rustc
   ];
 }

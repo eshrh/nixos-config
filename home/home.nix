@@ -13,9 +13,7 @@
     ./gui_programs.nix
     ./dev.nix
     ./sioyek/sioyek.nix
-    ./pulsemixer/pulsemixer.nix
     ./wallpaper/wallpaper.nix
-    ./git.nix
     ./dunst/dunst.nix
     ./music/music.nix
   ];

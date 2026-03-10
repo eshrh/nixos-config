@@ -43,13 +43,11 @@
     wineWowPackages.stable
     winetricks
     winePackages.stableFull
-    lutris
   ];
 
   programs = {
     fish.enable = true;
     steam.enable = true;
-    # cdemu.enable = true;
     gnupg.agent = {
       enable = true;
       pinentryPackage = pkgs.pinentry-gnome3;

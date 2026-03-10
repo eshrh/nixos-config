@@ -7,18 +7,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stephen-huan = {
-      url = "github:stephen-huan/nixos-config";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
-    stephen-huan,
     ...
   } @ inputs: {
     nixosConfigurations = {

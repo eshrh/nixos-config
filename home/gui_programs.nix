@@ -11,12 +11,9 @@
     pkgs.thunderbird
     pkgs.zotero
     pkgs.obs-studio
-    pkgs.gnuradio
-    pkgs.uhd
     pkgs.foliate
     pkgs.osu-lazer-bin
     pkgs.zoom-us
-    pkgs.teams-for-linux
     pkgs.xournalpp
   ];
   programs = {
