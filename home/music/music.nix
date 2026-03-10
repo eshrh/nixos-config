@@ -3,10 +3,11 @@
   pkgs,
   ...
 }: {
-  imports = [
-    ./ncmpcpp.nix
-  ];
   home.packages = [pkgs.mpc-cli];
+  programs.inori = {
+    enable = true;
+    settings.dvorak_keybindings = true;
+  };
   services.mpd = {
     enable = true;
     dataDir = "${config.xdg.configHome}/mpd";
