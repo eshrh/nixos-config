@@ -18,6 +18,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.luks.devices."luks-58e3c917-e5d1-4406-a6fa-acf832a930e0".device = "/dev/disk/by-uuid/58e3c917-e5d1-4406-a6fa-acf832a930e0";
+  boot.kernelParams = ["amdgpu.backlight=0" "acpi_backlight=video"];
 
   time.timeZone = "Asia/Tokyo";
   services.xserver.enable = true;
@@ -63,6 +64,7 @@
     pulse.enable = true;
   };
   services.openssh.enable = true;
+  virtualisation.docker.enable = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
   system.stateVersion = "23.11";
