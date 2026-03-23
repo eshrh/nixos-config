@@ -76,9 +76,9 @@ config fgcolor bgcolor hasBattery hasMPD screen =
                    ["BAT0"]
                    [ "-t", "<acstatus> (<left>%)",
                      "--",
-                     "-O", "<fc=#8ec07a>Charging</fc>",
+                     "-O", "<fc=#8ec07a>On</fc>",
                      "-i", "<fc=#83a598>Idle</fc>",
-                     "-o", "<fc=#fb4934>Discharging</fc>",
+                     "-o", "<fc=#fb4934>Off</fc>",
                      "-a", "notify-send -u critical 'battery low'",
                      "-A", "10"
                    ]

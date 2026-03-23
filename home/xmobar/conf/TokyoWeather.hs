@@ -105,8 +105,17 @@ addColor color string = "<fc=" ++ color ++ ">" ++ string ++ "</fc>"
 popsPrinter :: Int -> String
 popsPrinter p = (if p > 40 then addColor "#6bd7ff" else id) $ show p ++ "%" ++ (if p > 40 then "雨" else "")
 
+sliceBefore :: Eq a => a -> [a] -> [a]
+sliceBefore x xs =
+  case break ((== x) . snd) (zip (Nothing : map Just xs) xs) of
+    (ys, []) -> xs
+    (ys, _)  -> [ p | (p, _) <- ys, Just p <- [p] ]
+
 printer :: WeatherData -> String
-printer w = weather w ++ " / " ++ (head . words . winds) w ++ " / " ++ popsPrinter (pops w) ++ " / " ++ tempPrinter (temps w) ++ " /"
+printer w = (unwords . sliceBefore "では" . words . weather) w ++ " / " ++
+  (head . words . winds) w ++ " / " ++
+  popsPrinter (pops w) ++ " / " ++
+  tempPrinter (temps w) ++ " /"
 
 data TokyoWeather = TokyoWeather
   deriving (Read, Show)
@@ -114,4 +123,4 @@ data TokyoWeather = TokyoWeather
 instance Exec TokyoWeather where
   alias TokyoWeather = "tokyo"
   run TokyoWeather = getData
-  rate TokyoWeather = 36000
+  rate TokyoWeather = 3600
