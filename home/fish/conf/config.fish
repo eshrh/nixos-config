@@ -1,6 +1,7 @@
 if status is-interactive
     set -g fish_greeting
     alias ls=eza
+    cat ~/.cache/wal/sequences &
 end
 
 # Some of the most useful features in emacs-libvterm require shell-side

@@ -6,10 +6,13 @@
 }: let
   wal =
     (pkgs.runCommandLocal "wallpaper-pywal" {
-      nativeBuildInputs = [pkgs.pywal];
+      nativeBuildInputs = [
+        pkgs.pywal
+        pkgs.python3Packages.haishoku
+      ];
     }) ''
       cp ${./wallpaper.png} wallpaper.png
-      HOME="." wal -i wallpaper.png -n
+      HOME="." wal -i wallpaper.png --backend haishoku
       install -Dm755 .cache/wal/sequences -T $out
     '';
 in {
