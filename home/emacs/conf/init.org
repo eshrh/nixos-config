@@ -863,46 +863,6 @@ the [[https://retorque.re/zotero-better-bibtex/][better bibtex]] extension, whic
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 #+END_SRC
 
-*** Org-roam
-#+BEGIN_SRC emacs-lisp
-(sup 'org-roam)
-(setq org-roam-v2-ack t)
-#+END_SRC
-
-Basic setup. ~org-roam-db-autosync-mode~ is nice, but adds about 1.5s to my
-startup time. Not good!
-
-#+BEGIN_SRC emacs-lisp
-(unless (file-directory-p "~/roam")
-  (make-directory "~/roam"))
-(setq org-roam-directory (file-truename "~/roam"))
-
-#+END_SRC
-
-Pressing enter while your point is on a link should follow the link.
-#+BEGIN_SRC emacs-lisp
-(setq org-return-follows-link t)
-#+END_SRC
-
-Keybindings for my most used roam actions. ~publish.el~ refers to a personal
-elisp file I use to generate a website from my roam files you can find [[https://notes.esrh.me][here!]]
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c c i") #'org-roam-node-insert)
-(global-set-key (kbd "C-c c f") #'org-roam-node-find)
-(global-set-key (kbd "C-c c s") #'org-roam-db-sync)
-(global-set-key (kbd "C-c c p") (fn (interactive) (load-file "~/roam/publish.el")))
-
-#+END_SRC
-
-The default file name looks ugly and leads to ugly urls once exported. This
-makes the filenames just the titles.
-#+BEGIN_SRC emacs-lisp
-(setq org-roam-capture-templates
-      '(("d" "default" plain "%?" :target
-         (file+head "${slug}.org" "#+title: ${title}\n")
-         :unnarrowed t)))
-#+END_SRC
-
 *** Latex
 Adds my favorite document class, IEEE transactions to the org latex export.
 #+BEGIN_SRC emacs-lisp

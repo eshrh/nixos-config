@@ -2,8 +2,6 @@
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
 
-(setq native-comp-async-report-warnings-errors nil)
-
 (setq straight-check-for-modifications nil)
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -283,6 +281,7 @@ position of the outside of the paren.  Otherwise return nil."
 
 (setq dired-kill-when-opening-new-dired-buffer t)
 
+
   (add-fs-to-hook 'dired-mode-hook
                   (define-key dired-mode-map (kbd "-") #'swiper)
                   (define-key dired-mode-map (kbd "<") #'beginning-of-buffer)
@@ -372,6 +371,7 @@ position of the outside of the paren.  Otherwise return nil."
                 (electric-quote-mode -1)
                 auto-fill-mode)
 
+
 (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
 
 (sup 'ox-pandoc)
@@ -408,25 +408,6 @@ position of the outside of the paren.  Otherwise return nil."
 (setq bibtex-completion-bibliography '("~/docs/library.bib"))
 (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
-(sup 'org-roam)
-(setq org-roam-v2-ack t)
-
-(unless (file-directory-p "~/roam")
-  (make-directory "~/roam"))
-(setq org-roam-directory (file-truename "~/roam"))
-
-(setq org-return-follows-link t)
-
-(global-set-key (kbd "C-c c i") #'org-roam-node-insert)
-(global-set-key (kbd "C-c c f") #'org-roam-node-find)
-(global-set-key (kbd "C-c c s") #'org-roam-db-sync)
-(global-set-key (kbd "C-c c p") (fn (interactive) (load-file "~/roam/publish.el")))
-
-(setq org-roam-capture-templates
-      '(("d" "default" plain "%?" :target
-         (file+head "${slug}.org" "#+title: ${title}\n")
-         :unnarrowed t)))
-
 (with-eval-after-load 'ox-latex
   (add-to-list 'org-latex-classes
                '("IEEEtran"
@@ -434,6 +415,7 @@ position of the outside of the paren.  Otherwise return nil."
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
 
 (setq erc-default-server "irc.libera.chat")
 
@@ -596,6 +578,7 @@ used to fill a paragraph to `my-LaTeX-auto-fill-function'."
   (setq auto-fill-function 'my-LaTeX-auto-fill-function))
 
 (add-hook 'LaTeX-mode-hook 'my-LaTeX-setup-auto-fill)
+
 
 (advice-add #'japanese-latex-mode :after
             (lambda () (setq TeX-PDF-from-DVI "Dvipdfmx")))

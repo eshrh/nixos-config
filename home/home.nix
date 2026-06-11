@@ -19,6 +19,20 @@
   ];
   home.username = "esrh";
   home.homeDirectory = "/home/esrh";
-  home.stateVersion = "23.05";
+  home.stateVersion = "26.05";
   programs.home-manager.enable = true;
+
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = false;
+    setSessionVariables = false;
+    documents = "${config.home.homeDirectory}/docs";
+    download = "${config.home.homeDirectory}/down";
+    music = "${config.home.homeDirectory}/mus";
+    pictures = "${config.home.homeDirectory}/pics";
+    videos = "${config.home.homeDirectory}/vids";
+    desktop = "/tmp/.desktop";
+    templates = "/tmp/.templates";
+    publicShare = "/tmp/.publicshare";
+  };
 }
