@@ -240,6 +240,11 @@ position of the outside of the paren.  Otherwise return nil."
 (add-hook 'prog-mode #'rainbow-mode)
 #+END_SRC
 
+** Auto-revert prog modes
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode #'auto-revert-mode)
+#+END_SRC
+
 ** Auto whitespace cleanup
 Couldn't be bothered to care about whitespace myself. Didn't we make
 computers to do repetitive stuff for us??
@@ -255,12 +260,8 @@ My default fonts. Iosevka Meiseki is a customized version of [[https://github.co
 font. You can find a copy of it [[https://esrh.me/files/iosevka-meiseki-sans-regular.ttf][here]].
 
 #+BEGIN_SRC emacs-lisp
-(defvar emacs-english-font "monospace")
-(defvar emacs-cjk-font "IPAGothic")
-(setq my-font (concat emacs-english-font "-12"))
-
-(add-to-list 'default-frame-alist `(font . ,my-font))
-(set-face-attribute 'default t :font my-font)
+(add-to-list 'default-frame-alist '(font . "monospace-12"))
+(set-face-attribute 'default t :font "monospace-12")
 #+END_SRC
 
 ** Theme
@@ -1029,26 +1030,43 @@ for most block based languages, but works like a charm for lisps.
 
 **** Smartparens
 #+BEGIN_SRC emacs-lisp
+(require 'smartparens-config)
 (smartparens-global-mode)
 #+END_SRC
 
-Define a function to disable auto quote-completion. This is
-annoying in lisplike languages.
-
-#+BEGIN_SRC emacs-lisp
-(defun sp-disable (mode str)
-  (sp-local-pair mode str nil :actions nil))
-#+END_SRC
-
-Disable single quote pairing in lisp-data modes
-#+BEGIN_SRC emacs-lisp
-(sp-disable 'lisp-data-mode "'")
-#+END_SRC
-
 **** Racket
+for some reason, racket-mode is not loaded automatically... need to investigate.
 #+BEGIN_SRC emacs-lisp
-(sup 'racket-mode)
-(sup 'scribble-mode)
+(use-package racket-mode
+  :straight t)
+
+(add-fs-to-hook 'racket-mode-hook rainbow-delimiters-mode aggressive-indent-mode)
+(when (executable-find "racket")
+  (add-fs-to-hook 'racket-mode-hook racket-xp-mode))
+
+(use-package scribble-mode
+  :straight t)
+#+END_SRC
+
+I use [[https://docs.racket-lang.org/qi/index.html][qi]], a dsl for piping. This introduces several new syntactical
+constructs I use frequently:
+
+#+BEGIN_SRC emacs-lisp
+(put 'switch 'racket-indent-function 1)
+(put 'switch-lambda 'racket-indent-function 1)
+(put 'on 'racket-indent-function 1)
+(put 'π 'racket-indent-function 1)
+(put 'try 'racket-indent-function 1)
+
+(require 'quail)
+(quail-define-package
+ "racket-qi" "English" "QI" nil
+ "qi symbols"
+ nil t t t t nil nil nil nil nil t)
+
+(quail-define-rules
+ ("\\>" "~>")
+ ("\\q" ?☯))
 #+END_SRC
 
 **** Clojure
@@ -1056,18 +1074,13 @@ Cider is really good
 #+BEGIN_SRC emacs-lisp
 (sup 'clojure-mode)
 (sup 'cider)
-(sp-disable 'clojure-mode "'")
 #+END_SRC
 
 **** Elisp
 #+BEGIN_SRC emacs-lisp
 (sup 'elisp-format)
 (setq elisp-format-column 80)
-(sp-disable 'emacs-lisp-mode "'")
-(sp-disable 'emacs-lisp-mode "`")
-(sp-disable 'org-mode "'")
 #+END_SRC
-
 *** TeX
 AuCTeX offers a lot of sweet features that I’ve come to take for granted
 #+BEGIN_SRC emacs-lisp
@@ -1302,6 +1315,13 @@ Some people will call this deranged. I don't care.
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-hooks #'eglot-ensure 'tsx-ts-mode-hook)
 (setq js-indent-level 4)
+
+(sup 'fstar-mode)
+(setq-default fstar-executable "fstar")
+
+(sup '(daml-ts-mode
+       :host github
+       :repo "esrh-osec/daml-ts-mode.el"))
 #+END_SRC
 
 * Other config and elisp
