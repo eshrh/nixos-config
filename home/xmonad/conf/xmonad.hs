@@ -6,6 +6,7 @@
 
 {-# HLINT ignore "Use lambda-case" #-}
 
+import Brightness (adjustBrightnessPercent)
 import Control.Monad (ap, forM_, when, (<=<))
 import Control.Monad.Extra (findM, orM)
 import Data.Bifunctor
@@ -59,12 +60,18 @@ commandKeys =
     ("M-/", scratchpadCloseOrPrompt),
     ("M-<Space>", shellPrompt promptConf),
     -- Audio
+    ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"),
     ("C-M-a", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"),
     ("C-M-o", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"),
+    ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"),
+    ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"),
+
     ("C-M-e", spawn "playerctl play-pause"),
-    ("C-M-w", spawn "mpc toggle"),
     ("C-M-b", spawn "playerctl previous"),
     ("C-M-m", spawn "playerctl next"),
+    -- Brightness
+    ("<XF86MonBrightnessDown>", adjustBrightnessPercent (-10)),
+    ("<XF86MonBrightnessUp>", adjustBrightnessPercent 10),
     -- Application commands
     ("M-S-q", spawn "xmonad --recompile && xmonad --restart"),
     ("M-<Return>", spawn "alacritty"),

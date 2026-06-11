@@ -12,4 +12,8 @@
   networking.hostName = "helianthus";
   system.stateVersion = "23.11";
 
+  services.udev.extraRules = ''
+    RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/acpi_video0/brightness"
+    RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/acpi_video0/brightness"
+  '';
 }
