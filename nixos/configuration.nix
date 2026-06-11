@@ -5,7 +5,6 @@
   ...
 }: {
   imports = [
-    ./hardware-configuration.nix
     ./networking.nix
     ./caps_to_esc.nix
     ./ibus.nix
@@ -17,8 +16,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.luks.devices."luks-58e3c917-e5d1-4406-a6fa-acf832a930e0".device = "/dev/disk/by-uuid/58e3c917-e5d1-4406-a6fa-acf832a930e0";
-  boot.kernelParams = ["amdgpu.backlight=0" "acpi_backlight=video"];
 
   time.timeZone = "Asia/Tokyo";
   services.xserver.enable = true;
