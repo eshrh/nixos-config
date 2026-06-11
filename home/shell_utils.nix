@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = [
     pkgs.alejandra
+    pkgs.bottom
     pkgs.cmake
     pkgs.jq
     pkgs.pandoc

@@ -10,7 +10,7 @@
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
       ipafont
-      iosevka-meiseki # from ./iosevka.nix, custom iosevka build
+      # iosevka-meiseki # from ./iosevka.nix, custom iosevka build
     ];
     fontconfig = {
       defaultFonts = {

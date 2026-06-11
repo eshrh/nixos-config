@@ -11,8 +11,6 @@
     pkgs.zotero
     pkgs.obs-studio
     pkgs.foliate
-    pkgs.osu-lazer-bin
-    pkgs.zoom-us
     pkgs.xournalpp
   ];
   programs.alacritty = {

@@ -3,7 +3,10 @@
   pkgs,
   ...
 }: {
-  home.packages = [pkgs.mpc];
+  home.packages = [
+    pkgs.mpc
+    pkgs.playerctl
+  ];
   programs.inori = {
     enable = true;
     settings.dvorak_keybindings = true;
@@ -49,8 +52,9 @@
       plugins = "edit";
       directory = "${config.home.homeDirectory}/mus";
       library = "${config.xdg.configHome}/mpd/BEETSdb";
-      import.move = "no";
-      import.copy = "yes";
+      import.move = false;
+      import.copy = true;
     };
   };
+  services.mpd-mpris.enable = true;
 }
