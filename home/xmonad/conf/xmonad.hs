@@ -61,7 +61,7 @@ commandKeys =
     -- Audio
     ("C-M-a", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"),
     ("C-M-o", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"),
-    ("C-M-x", spawn "playerctl play-pause"),
+    ("C-M-e", spawn "playerctl play-pause"),
     ("C-M-w", spawn "mpc toggle"),
     ("C-M-b", spawn "playerctl previous"),
     ("C-M-m", spawn "playerctl next"),
