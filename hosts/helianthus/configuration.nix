@@ -10,4 +10,6 @@
   boot.kernelParams = ["amdgpu.backlight=0" "acpi_backlight=video"];
 
   networking.hostName = "helianthus";
+  system.stateVersion = "23.11";
+
 }
