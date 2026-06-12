@@ -16,19 +16,12 @@
     ./wallpaper/wallpaper.nix
     ./dunst/dunst.nix
     ./music/music.nix
+    ./ibus-settings.nix
   ];
   home.username = "esrh";
   home.homeDirectory = "/home/esrh";
   home.stateVersion = "26.05";
   programs.home-manager.enable = true;
-
-  # for ibus... see /nixos/ibus.nix
-  dconf.settings = {
-    "org/freedesktop/ibus/general" = {
-      preload-engines = ["xkb:us:dvorak:eng" "mozc-jp" "rime"];
-      engines-order = ["xkb:us:dvorak:eng" "mozc-jp" "rime"];
-    };
-  };
 
   xdg.userDirs = {
     enable = true;
