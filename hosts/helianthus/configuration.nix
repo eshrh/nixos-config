@@ -4,7 +4,7 @@
   lib,
   ...
 }: {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [./hardware-configuration.nix];
 
   boot.initrd.luks.devices."luks-58e3c917-e5d1-4406-a6fa-acf832a930e0".device = "/dev/disk/by-uuid/58e3c917-e5d1-4406-a6fa-acf832a930e0";
   boot.kernelParams = ["amdgpu.backlight=0" "acpi_backlight=video"];

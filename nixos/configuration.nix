@@ -30,13 +30,15 @@
   users.users.esrh = {
     isNormalUser = true;
     description = "Eshan Ramesh";
-    extraGroups = ["networkmanager"
-                   "wheel"
-                   "audio"
-                   "video"
-                   "openrazer"
-                   "cdrom"
-                   "dialout"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "audio"
+      "video"
+      "openrazer"
+      "cdrom"
+      "dialout"
+    ];
     shell = pkgs.fish;
   };
 
