@@ -20,6 +20,7 @@
   time.timeZone = "Asia/Tokyo";
   services.xserver.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
+  services.xserver.desktopManager.wallpaper.mode = "fill";
   services.xserver.xkb = {
     layout = "us";
     variant = "dvorak";
