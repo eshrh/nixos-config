@@ -14,6 +14,7 @@
     pkgs.ncdu
     pkgs.pulseaudio # for pactl
     pkgs.pulsemixer
+    pkgs.libnotify
 
     pkgs.fastfetch
     pkgs.pywal
