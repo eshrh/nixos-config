@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = [
     pkgs.alejandra
+    pkgs.android-tools
     pkgs.bottom
     pkgs.cmake
     pkgs.jq

@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   home.packages = [
-    pkgs.android-tools
     pkgs.anki
     pkgs.feh
     pkgs.gimp
@@ -8,7 +7,6 @@
     pkgs.qbittorrent
     pkgs.signal-desktop
     pkgs.thunderbird
-    pkgs.zotero
     pkgs.obs-studio
     pkgs.foliate
     pkgs.xournalpp
