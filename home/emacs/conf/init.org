@@ -523,6 +523,13 @@ find file function, only when I'm in a project.
 (meow-leader-define-key '("U" . find-file))
 #+END_SRC
 
+** Envrc
+For use with direnv and nix.
+#+BEGIN_SRC emacs-lisp
+(sup 'envrc)
+(envrc-global-mode 1)
+#+END_SRC
+
 ** Searching
 *** Vertico
 #+BEGIN_SRC emacs-lisp
@@ -977,13 +984,6 @@ ripgrep binary, "rg" is also installed
 #+BEGIN_SRC emacs-lisp
 (when (executable-find "rg")
   (sup 'deadgrep))
-#+END_SRC
-** AI
-#+BEGIN_SRC emacs-lisp
-(sup 'gptel)
-(with-eval-after-load 'gptel
-  (setcdr (assoc 'default gptel-directives)
-          (cdr (assoc 'programming gptel-directives))))
 #+END_SRC
 ** Language-specific config
 *** Haskell
