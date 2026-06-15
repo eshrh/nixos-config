@@ -40,7 +40,10 @@
             home-manager.backupFileExtension = "hm-backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.esrh = import ./home/home.nix;
+            home-manager.users.esrh.imports = [
+              ./home/home.nix
+              ./hosts/iris/iris-home.nix
+            ];
           }
         ];
       };
