@@ -61,6 +61,8 @@
     };
   };
 
+  services.openssh.enable = true;
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -69,8 +71,8 @@
     audio.enable = true;
     pulse.enable = true;
   };
-  services.openssh.enable = true;
-  virtualisation.docker.enable = true;
+
+  # virtualisation.docker.enable = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 }

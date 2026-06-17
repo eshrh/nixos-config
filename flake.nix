@@ -16,6 +16,7 @@
     ...
   } @ inputs: {
     nixosConfigurations = {
+      # x395 ()
       "helianthus" = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
@@ -30,6 +31,7 @@
           }
         ];
       };
+      # x1 carbon g14 (21V7CT01WW)
       "iris" = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
