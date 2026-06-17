@@ -1282,11 +1282,6 @@ Some people will call this deranged. I don't care.
 
 *** Other
 #+BEGIN_SRC emacs-lisp
-(sup '(kbd-mode
-       :type git
-       :repo "https://github.com/kmonad/kbd-mode"))
-(add-hook 'kbd-mode-hook (fn (aggressive-indent-mode -1)))
-
 (sup 'rust-mode)
 (when treesit-available
     (treesit-ensure 'rust)
@@ -1322,6 +1317,8 @@ Some people will call this deranged. I don't care.
 (sup '(daml-ts-mode
        :host github
        :repo "esrh-osec/daml-ts-mode.el"))
+
+(sup 'typescript-mode)
 #+END_SRC
 
 * Other config and elisp

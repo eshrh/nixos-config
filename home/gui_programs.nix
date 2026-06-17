@@ -9,6 +9,7 @@
     pkgs.thunderbird
     pkgs.obs-studio
     pkgs.foliate
+    pkgs.vscodium-fhs
     pkgs.xournalpp
   ];
   programs.alacritty = {

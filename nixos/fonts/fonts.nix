@@ -9,14 +9,14 @@
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
-      ipafont
-      iosevka-meiseki # from ./iosevka.nix, custom iosevka build
+      # iosevka-meiseki # from ./iosevka.nix, custom iosevka build
+      ioskeley-mono.normal
     ];
     fontconfig = {
       defaultFonts = {
-        sansSerif = ["Noto Sans" "IPAGothic"];
-        serif = ["Noto Serif" "IPAMincho"];
-        monospace = ["Iosevka Meiseki" "IPAGothic"];
+        sansSerif = ["Noto Sans"];
+        serif = ["Noto Serif"];
+        monospace = ["Ioskeley Mono"];
         emoji = ["Noto Color Emoji"];
       };
     };
