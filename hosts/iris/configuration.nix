@@ -25,5 +25,4 @@
     enable = true;
     powerOnBoot = false;
   };
-
 }
