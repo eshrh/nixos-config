@@ -256,12 +256,28 @@ computers to do repetitive stuff for us??
 
 ** Fonts
 
-My default fonts. Iosevka Meiseki is a customized version of [[https://github.com/be5invis/iosevka][iosevka]]
-font. You can find a copy of it [[https://esrh.me/files/iosevka-meiseki-sans-regular.ttf][here]].
+I want emacs to use the system default monospace font (set via fontconfig).
+Emacs doesn't honor fontconfig's generic-alias preferences for the default
+face, so ="monospace"= resolves to whatever emacs picks on its own rather than
+the configured font. Every other app respects it fine.
+
+So I ask =fc-match= for the concrete family that =monospace= resolves to and
+hand emacs that exact name, keeping fontconfig the single source of truth. If
+=fc-match= isn't on PATH, fall back to =monospace-12=.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist '(font . "monospace-12"))
-(set-face-attribute 'default t :font "monospace-12")
+(defvar my-monospace-font
+  (if (executable-find "fc-match")
+      (car (split-string
+            (string-trim
+             (shell-command-to-string "fc-match -f '%{family}' monospace"))
+            ","))
+    "monospace")
+  "Concrete monospace family resolved from fontconfig at startup.")
+
+(let ((font (concat my-monospace-font "-12")))
+  (add-to-list 'default-frame-alist (cons 'font font))
+  (set-face-attribute 'default t :font font))
 #+END_SRC
 
 ** Theme
