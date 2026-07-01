@@ -9,7 +9,6 @@
     ./caps_to_esc.nix
     ./ibus.nix
     ./fonts/fonts.nix
-    ./razer/razer.nix
     ./nonfree.nix
   ];
 
@@ -35,7 +34,6 @@
       "wheel"
       "audio"
       "video"
-      "openrazer"
       "cdrom"
       "dialout"
     ];

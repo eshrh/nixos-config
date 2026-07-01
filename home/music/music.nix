@@ -9,7 +9,14 @@
   ];
   programs.inori = {
     enable = true;
-    settings.dvorak_keybindings = true;
+    settings = {
+      dvorak_keybindings = true;
+      seek_seconds = 3;
+      keybindings = {
+        seek = "f";
+        seek_backwards = "b";
+      };
+    };
   };
   services.mpd = {
     enable = true;

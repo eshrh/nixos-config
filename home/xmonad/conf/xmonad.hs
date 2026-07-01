@@ -74,7 +74,7 @@ commandKeys =
     ("<XF86MonBrightnessUp>", adjustBrightnessPercent 10),
     -- Application commands
     ("M-S-q", spawn "xmonad --recompile && xmonad --restart"),
-    ("M-<Return>", spawn "alacritty"),
+    ("M-<Return>", spawn "kitty"),
     ("M-S-u", spawn "firefox"),
     ("M-S-,", spawn "ames -w"),
     ("M-S-.", spawn "ames -r"),
@@ -156,7 +156,7 @@ mkScratchpadFromTerm :: String -> NamedScratchpad
 mkScratchpadFromTerm name =
   NS
     name
-    ("alacritty --title '" ++ name ++ "' -e " ++ name)
+    ("kitty --title '" ++ name ++ "' fish -C '" ++ name ++ "'")
     (title =? name)
     (customFloating floatDimensions)
 

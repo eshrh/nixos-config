@@ -11,10 +11,16 @@
     pkgs.foliate
     pkgs.vscodium-fhs
     pkgs.xournalpp
+    pkgs.yubioath-flutter
   ];
-  programs.alacritty = {
+  programs.kitty = {
     enable = true;
-    settings.font.size = 8;
+    font = {
+      name = "monospace";
+      size = 12;
+    };
+    settings.confirm_os_window_close = 0;
+    settings.auto_reload_config = -1;
   };
   programs.firefox.enable = true;
 }

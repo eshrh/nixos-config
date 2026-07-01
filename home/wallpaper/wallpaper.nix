@@ -12,7 +12,7 @@
       ];
     }) ''
       cp ${./wallpaper.png} wallpaper.png
-      HOME="." wal -i wallpaper.png --backend haishoku
+      HOME="." wal -i wallpaper.png -b 000000 --backend haishoku
       install -Dm755 .cache/wal/sequences -T $out
     '';
 in {
