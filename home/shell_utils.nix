@@ -43,8 +43,8 @@
      left      = h, KEY_LEFT, d
      right     = l, KEY_RIGHT, n
      mode1     = KEY_F1, c
-     mode2     = KEY_F2, l
-     mode3     = KEY_F3, r
+     mode2     = KEY_F2, r
+     mode3     = KEY_F3, l
   '';
   programs.git = {
     enable = true;

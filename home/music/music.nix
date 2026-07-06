@@ -56,11 +56,10 @@
     enable = true;
     mpdIntegration.port = 6600;
     settings = {
-      plugins = "edit";
+      plugins = ["edit" "musicbrainz" "fetchart"];
+      import.copy = true;
       directory = "${config.home.homeDirectory}/mus";
       library = "${config.xdg.configHome}/mpd/BEETSdb";
-      import.move = false;
-      import.copy = true;
     };
   };
   services.mpd-mpris.enable = true;
