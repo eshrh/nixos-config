@@ -16,7 +16,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  time.timeZone = "Asia/Tokyo";
+  time.timeZone = "America/New_York";
   services.xserver.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.desktopManager.wallpaper.mode = "fill";
