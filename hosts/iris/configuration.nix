@@ -19,6 +19,9 @@
   services.udev.extraRules = ''
     RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/intel_backlight/brightness"
     RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness"
+
+    # moondrop freedsp mini
+    KERNEL=="hidraw*", ATTRS{idVendor}=="35d8", ATTRS{idProduct}=="98d4", MODE="0666", TAG+="uaccess"
   '';
 
   hardware.bluetooth = {
