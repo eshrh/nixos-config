@@ -12,6 +12,7 @@
     pkgs.vscodium-fhs
     pkgs.xournalpp
     pkgs.yubioath-flutter
+    pkgs.solaar
   ];
   programs.kitty = {
     enable = true;
