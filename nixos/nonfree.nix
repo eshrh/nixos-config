@@ -8,5 +8,6 @@ in {
       "steam"
       "steam-run"
       "steam-original"
+      "tx02.tar.gz"
     ]);
 }
