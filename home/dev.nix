@@ -1,17 +1,13 @@
 {pkgs, ...}: {
   home.packages = [
     (pkgs.python3.withPackages (python-pkgs: [
-      python-pkgs.pandas
       python-pkgs.numpy
       python-pkgs.matplotlib
       python-pkgs.requests
       python-pkgs.ipython
-      python-pkgs.pyqt6
 
-      python-pkgs.python-lsp-server
-      python-pkgs.pylsp-mypy
-      python-pkgs.pylsp-rope
     ]))
+    pkgs.pyright
     pkgs.gnumake
     pkgs.gcc
     pkgs.libtool
