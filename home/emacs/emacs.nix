@@ -13,7 +13,17 @@
     cp init.el $out
   '';
 in {
-  programs.emacs.enable = true;
+  programs.emacs = {
+    enable = true;
+
+    # in general, I use straight for package management.
+    # however, agda-mode comes from the agda source code itself.
+    # so, it's quite annoying to install via straight.
+    extraPackages = epkgs: [
+      epkgs.agda2-mode
+    ];
+  };
+
   home.sessionVariables = {
     EDITOR = "emacs";
   };

@@ -1014,7 +1014,15 @@ Interactive haskell error customization
 (setq haskell-interactive-popup-errors t)
 #+END_SRC
 
-*** C-style
+Custom mode I wrote for the daml smart contract language, which
+is based on Haskell.
+#+BEGIN_SRC emacs-lisp
+(sup '(daml-ts-mode
+       :host github
+       :repo "esrh-osec/daml-ts-mode.el"))
+#+END_SRC
+
+*** C-like
 #+BEGIN_SRC emacs-lisp
 (when treesit-available
   (treesit-ensure 'c)
@@ -1025,6 +1033,11 @@ Interactive haskell error customization
 (setq-default c-basic-offset 4
               kill-whole-line t
               indent-tabs-mode nil)
+
+(sup 'rust-mode)
+(when treesit-available
+  (treesit-ensure 'rust)
+  (setq rust-mode-treesitter-derive t))
 #+END_SRC
 
 *** Lisp
@@ -1219,11 +1232,6 @@ Make ipython the default shell
       python-shell-interpreter-args "-i --simple-prompt --InteractiveShell.display_page=True")
 #+END_SRC
 
-conda env management
-#+BEGIN_SRC emacs-lisp
-(sup 'conda)
-#+END_SRC
-
 **** Campus
 A small package I wrote to make repl interaction cleaner
 #+BEGIN_SRC emacs-lisp
@@ -1298,12 +1306,6 @@ Some people will call this deranged. I don't care.
 
 *** Other
 #+BEGIN_SRC emacs-lisp
-(sup 'rust-mode)
-(when treesit-available
-    (treesit-ensure 'rust)
-    (setq rust-mode-treesitter-derive t))
-
-
 (sup '(matsurika-mode
        :type git
        :host github
@@ -1311,30 +1313,13 @@ Some people will call this deranged. I don't care.
        :files ("*.el" "docs.txt")))
 
 (sup 'nix-mode)
-
-(sup 'julia-snail)
-(add-hook 'julia-mode-hook #'julia-snail-mode)
-
 (sup 'markdown-mode)
-
-(add-fs-to-hook 'java-mode-hook
-                flycheck-mode
-                (setq c-basic-offset 4)
-                (setq tab-width 4))
-
-
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-(add-to-hooks #'eglot-ensure 'tsx-ts-mode-hook)
-(setq js-indent-level 4)
-
-(sup 'fstar-mode)
-(setq-default fstar-executable "fstar")
-
-(sup '(daml-ts-mode
-       :host github
-       :repo "esrh-osec/daml-ts-mode.el"))
-
 (sup 'typescript-mode)
+(when treesit-available
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+  (add-to-hooks #'eglot-ensure 'tsx-ts-mode-hook))
+
+
 #+END_SRC
 
 * Other config and elisp
