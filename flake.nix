@@ -49,6 +49,21 @@
           }
         ];
       };
-    };
-  };
+      # pc
+      "chrysanthemum" = nixpkgs.lib.nixosSystem rec {
+	system = "x86_64-linux";
+	modules = [
+          ./hosts/chrysanthemum/configuration.nix
+	  ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+	    home-manager.backupFileExtension = "hm-backup";
+	    home-manager.useGlobalPkgs = true;
+	    home-manager.useUserPackages = true;
+	    home-manager.users.esrh = import ./home/home.nix;
+	  }
+       ];
+     };
+   };
+ };
 }
