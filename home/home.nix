@@ -29,7 +29,7 @@
     setSessionVariables = false;
     documents = "${config.home.homeDirectory}/docs";
     download = "${config.home.homeDirectory}/down";
-    music = "${config.home.homeDirectory}/mus";
+    music = "${config.home.homeDirectory}/muse";
     pictures = "${config.home.homeDirectory}/pics";
     videos = "${config.home.homeDirectory}/vids";
     desktop = "/tmp/.desktop";

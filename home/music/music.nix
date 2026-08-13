@@ -22,8 +22,8 @@
     enable = true;
     dataDir = "${config.xdg.configHome}/mpd";
     dbFile = "${config.xdg.configHome}/mpd/database";
-    musicDirectory = "${config.home.homeDirectory}/mus";
-    playlistDirectory = "${config.home.homeDirectory}/mus/playlists";
+    musicDirectory = "${config.home.homeDirectory}/muse";
+    playlistDirectory = "${config.home.homeDirectory}/muse/playlists";
     network = {
       listenAddress = "127.0.0.1";
       port = 6600;
@@ -58,7 +58,7 @@
     settings = {
       plugins = ["edit" "musicbrainz" "fetchart"];
       import.copy = true;
-      directory = "${config.home.homeDirectory}/mus";
+      directory = "${config.home.homeDirectory}/muse";
       library = "${config.xdg.configHome}/mpd/BEETSdb";
     };
   };
