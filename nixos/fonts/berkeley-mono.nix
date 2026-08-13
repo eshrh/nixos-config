@@ -1,4 +1,4 @@
-{ pkgs }:
+{pkgs}:
 pkgs.stdenv.mkDerivation {
   pname = "berkeley-mono-typeface";
   version = "2.004";

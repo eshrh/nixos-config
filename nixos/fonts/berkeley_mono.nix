@@ -1,4 +1,4 @@
-{ pkgs }:
+{pkgs}:
 pkgs.stdenv.mkDerivation {
   pname = "berkeley-mono";
   version = "2.004";

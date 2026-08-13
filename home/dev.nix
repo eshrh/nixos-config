@@ -5,7 +5,6 @@
       python-pkgs.matplotlib
       python-pkgs.requests
       python-pkgs.ipython
-
     ]))
     pkgs.pyright
     pkgs.gnumake

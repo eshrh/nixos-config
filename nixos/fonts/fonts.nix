@@ -2,11 +2,9 @@
   config,
   pkgs,
   ...
-}:
-let
+}: let
   berkeley-mono = pkgs.callPackage ./berkeley-mono.nix {};
-in
-{
+in {
   imports = [./iosevka.nix];
   fonts = {
     packages = with pkgs; [
