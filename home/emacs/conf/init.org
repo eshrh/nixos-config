@@ -824,12 +824,6 @@ Don't insert lines in between headers and list items.
 (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
 #+END_SRC
 
-Change the backends.
-#+BEGIN_SRC emacs-lisp
-(sup 'ox-pandoc)
-(setq org-export-backends '(latex beamer md html odt ascii pandoc))
-#+END_SRC
-
 Don't indent code in org-babel
 #+BEGIN_SRC emacs-lisp
 (setq org-edit-src-content-indentation 0)
