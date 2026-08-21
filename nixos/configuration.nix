@@ -70,6 +70,8 @@
     pulse.enable = true;
   };
 
+  hardware.keyboard.qmk.enable = true;
+
   # virtualisation.docker.enable = true;
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
