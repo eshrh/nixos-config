@@ -3,7 +3,6 @@
 import System.Environment
 import XMonad.Util.Run (runProcessWithInput)
 import Xmobar
-import TokyoWeather (TokyoWeather(..))
 import Data.List
 import Data.List.Split (chunksOf)
 import Data.Maybe (fromMaybe)
@@ -47,7 +46,7 @@ config fgcolor bgcolor hasBattery hasMPD screen =
         "%StdinReader% " ++ (if hasBattery then "/ %battery% " else "")
           ++ "/ %multicpu% / %memory% /}{"
           ++ (if hasMPD then "%mpd% / " else "")
-          ++ "%tokyo% %date%",
+          ++ "%date%",
       -- general behavior
       lowerOnStart = True,
       hideOnStart = False,
@@ -58,7 +57,6 @@ config fgcolor bgcolor hasBattery hasMPD screen =
       commands =
         -- weather monitor
         [
-          Run TokyoWeather,
           Run $
             MultiCpu
               [ "--template", "cpu: <total>%"]
