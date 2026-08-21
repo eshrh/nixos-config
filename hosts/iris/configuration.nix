@@ -12,6 +12,33 @@
   services.fwupd.enable = true;
   systemd.timers.fwupd-refresh.enable = false;
 
+  services.pipewire.wireplumber.extraConfig."51-freedsp-volume-limit" = {
+    "monitor.alsa.rules" = [
+      {
+        matches = [
+          {
+            "device.name" = "~alsa_card.usb-MOONDROP_FreeDSP_Mini_.*";
+          }
+        ];
+        actions.update-props = {
+          # Avoid the FreeDSP's unreliable hardware volume control.
+          "api.alsa.soft-mixer" = true;
+        };
+      }
+      {
+        matches = [
+          {
+            "node.name" = "~alsa_output.usb-MOONDROP_FreeDSP_Mini_.*";
+          }
+        ];
+        actions.update-props = {
+          # PulseAudio-style 50% volume: 0.5 ^ 3 = 0.125 (-18.1 dB).
+          "channelmix.max-volume" = 0.125;
+        };
+      }
+    ];
+  };
+
   networking.hostName = "iris";
 
   system.stateVersion = "26.05";
