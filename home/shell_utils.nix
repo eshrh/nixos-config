@@ -27,8 +27,11 @@
     pkgs.imagemagick
 
     pkgs.texliveFull
-    pkgs.libqalculate
   ];
+  programs.qalculate = {
+    enable = true;
+    settings.Mode.calculate_as_you_type = 1;
+  };
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
