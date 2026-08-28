@@ -35,5 +35,10 @@
     engines-order = lib.mkForce ["xkb:us::eng" "mozc-on" "rime"];
   };
 
+  services.picom = {
+    enable = true;
+    backend = "glx";
+  };
+
   system.stateVersion = "26.05"; # Did you read the comment?
 }
