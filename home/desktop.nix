@@ -4,24 +4,22 @@
   ...
 }: {
   imports = [
-    ./emacs/emacs.nix
+    ./common.nix
+    ./desktop_utils.nix
     ./xmonad/xmonad.nix
     ./xmobar/xmobar.nix
-    ./fish/fish.nix
-    ./shell_utils.nix
     ./nsxiv/nsxiv.nix
     ./gui_programs.nix
-    ./dev.nix
     ./sioyek/sioyek.nix
     ./wallpaper/wallpaper.nix
     ./dunst/dunst.nix
     ./music/music.nix
     ./ibus-settings.nix
+    ./nonfree/claude.nix
+    ./texlive.nix
   ];
-  home.username = "esrh";
-  home.homeDirectory = "/home/esrh";
-  home.stateVersion = "26.05";
-  programs.home-manager.enable = true;
+
+  programs.emacs.package = pkgs.emacs;
 
   xdg.userDirs = {
     enable = true;
@@ -35,10 +33,5 @@
     desktop = "/tmp/.desktop";
     templates = "/tmp/.templates";
     publicShare = "/tmp/.publicshare";
-  };
-
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
   };
 }

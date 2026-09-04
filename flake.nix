@@ -26,13 +26,14 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/helianthus/configuration.nix
-          ./nixos/configuration.nix
+          ./nixos/common.nix
+          ./nixos/desktop.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.backupFileExtension = "hm-backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.esrh = import ./home/home.nix;
+            home-manager.users.esrh = import ./home/desktop.nix;
           }
         ];
       };
@@ -41,16 +42,32 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/iris/configuration.nix
-          ./nixos/configuration.nix
+          ./nixos/common.nix
+          ./nixos/desktop.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.backupFileExtension = "hm-backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.esrh.imports = [
-              ./home/home.nix
+              ./home/desktop.nix
               ./hosts/iris/iris-home.nix
             ];
+          }
+        ];
+      };
+      # thinkcentre m70q
+      "magnolia" = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/magnolia/configuration.nix
+          ./nixos/common.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.backupFileExtension = "hm-backup";
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.esrh = import ./home/common.nix;
           }
         ];
       };
@@ -59,20 +76,21 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/chrysanthemum/configuration.nix
-          ./nixos/configuration.nix
+          ./nixos/common.nix
+          ./nixos/desktop.nix
           home-manager.nixosModules.home-manager
           aagl.nixosModules.default
           {
             home-manager.backupFileExtension = "hm-backup";
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.esrh = import ./home/home.nix;
+            home-manager.users.esrh = import ./home/desktop.nix;
 
             nix.settings = aagl.nixConfig;
             programs.anime-game-launcher.enable = true;
           }
-       ];
-     };
-   };
- };
+        ];
+      };
+    };
+  };
 }

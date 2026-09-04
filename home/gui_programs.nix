@@ -34,6 +34,7 @@ in {
     pkgs.xournalpp
     pkgs.yubioath-flutter
     pkgs.solaar
+    pkgs.wineWow64Packages.stableFull
   ];
   programs.kitty = {
     enable = true;
