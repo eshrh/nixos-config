@@ -30,7 +30,10 @@
 (use-package gruvbox-theme
   :demand t
   :config
-  (load-theme 'gruvbox-dark-hard t nil))
+  (load-theme 'gruvbox-dark-hard t nil)
+  (when (facep 'vertico-posframe-border)
+    (set-face-background 'vertico-posframe-border
+                         (face-attribute 'region :background))))
 
 (use-package telephone-line
   :demand t

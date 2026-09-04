@@ -11,6 +11,12 @@
   :bind (:map vertico-map
               ("DEL" . vertico-directory-delete-char)))
 
+(use-package vertico-sort
+  :after vertico
+  :demand t
+  :custom
+  (vertico-sort-function #'vertico-sort-history-length-alpha))
+
 (use-package marginalia
   :demand t
   :config
@@ -35,9 +41,7 @@
   :after vertico
   :demand t
   :config
-  (vertico-posframe-mode 1)
-  (set-face-background 'vertico-posframe-border
-                       (face-attribute 'region :background)))
+  (vertico-posframe-mode 1))
 
 (provide 'esrh-completion)
 ;;; esrh-completion.el ends here
