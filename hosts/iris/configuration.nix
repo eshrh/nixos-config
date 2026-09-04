@@ -33,7 +33,7 @@
         ];
         actions.update-props = {
           # PulseAudio-style 50% volume: 0.5 ^ 3 = 0.125 (-18.1 dB).
-          "channelmix.max-volume" = 0.125;
+          "channelmix.max-volume" = 0.25;
         };
       }
     ];

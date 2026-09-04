@@ -61,6 +61,8 @@
 
   services.openssh.enable = true;
 
+  services.hardware.bolt.enable = true;
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
