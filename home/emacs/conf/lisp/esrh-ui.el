@@ -1,6 +1,7 @@
 ;;; esrh-ui.el --- Frames, faces, and presentation -*- lexical-binding: t; -*-
 
-(scroll-bar-mode -1)
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
 (column-number-mode 1)
 (show-paren-mode 1)
 
