@@ -62,6 +62,7 @@
         modules = [
           ./hosts/magnolia/configuration.nix
           ./nixos/common.nix
+          ./nixos/mullvad.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.backupFileExtension = "hm-backup";
