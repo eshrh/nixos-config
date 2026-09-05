@@ -3,6 +3,14 @@
 
   networking.hostName = "magnolia";
 
+  fileSystems."/disk" = {
+    device = "/dev/disk/by-label/ssd";
+    fsType = "ext4";
+    options = ["noatime"];
+  };
+
+  services.fstrim.enable = true;
+
   networking.networkmanager.dispatcherScripts = [
     {
       source = pkgs.writeShellScript "magnolia-wifi-fallback" ''
