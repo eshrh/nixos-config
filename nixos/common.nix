@@ -21,8 +21,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  console.keyMap = "dvorak";
-
   users.users.esrh = {
     isNormalUser = true;
     description = "Eshan Ramesh";

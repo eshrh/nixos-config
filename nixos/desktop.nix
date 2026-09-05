@@ -12,10 +12,6 @@
     enable = true;
     windowManager.xmonad.enable = true;
     desktopManager.wallpaper.mode = "fill";
-    xkb = {
-      layout = "us";
-      variant = "dvorak";
-    };
   };
 
   users.users.esrh.extraGroups = ["audio" "video" "cdrom" "dialout"];

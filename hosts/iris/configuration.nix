@@ -41,6 +41,12 @@
 
   networking.hostName = "iris";
 
+  console.keyMap = "dvorak";
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "dvorak";
+  };
+
   system.stateVersion = "26.05";
 
   services.udev.extraRules = ''

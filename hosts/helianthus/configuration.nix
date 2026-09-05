@@ -10,6 +10,13 @@
   boot.kernelParams = ["amdgpu.backlight=0" "acpi_backlight=video"];
 
   networking.hostName = "helianthus";
+
+  console.keyMap = "dvorak";
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "dvorak";
+  };
+
   system.stateVersion = "23.11";
 
   services.udev.extraRules = ''
