@@ -26,39 +26,6 @@
   :bind (:map org-mode-map
               ("s-<return>" . org-meta-return)))
 
-(defun org-inside-latex-block ()
-  "Return non-nil when point is inside a LaTeX environment."
-  (eq (car (org-element-at-point)) 'latex-environment))
-
-(use-package org-fragtog
-  :after org
-  :commands org-fragtog-mode
-  :custom
-  (org-fragtog-ignore-predicates
-   '(org-at-table-p org-inside-latex-block)))
-
-(use-package ivy-bibtex
-  :commands ivy-bibtex
-  :custom
-  (bibtex-completion-bibliography '("~/docs/library.bib")))
-
-(use-package org-ref
-  :after org
-  :commands (org-ref-insert-link
-             org-ref-insert-link-menu
-             org-ref-citation-menu)
-  :bind (:map org-mode-map
-              ("C-c ]" . org-ref-insert-link)
-              ("S-]" . org-ref-insert-link-menu)
-              ("C-c r" . org-ref-citation-menu))
-  :custom
-  (org-ref-insert-link-function 'org-ref-insert-link-menu)
-  (org-ref-insert-cite-function 'org-ref-cite-insert-ivy)
-  (org-ref-insert-label-function 'org-ref-insert-label-link)
-  (org-ref-insert-ref-function 'org-ref-insert-ref-link)
-  (org-ref-cite-onclick-function
-   (lambda (_key) (org-ref-citation-menu))))
-
 (with-eval-after-load 'ox-latex
   (add-to-list
    'org-latex-classes

@@ -109,6 +109,13 @@
       tree-sitter-typescript
     ])
     ++ [damlGrammar]);
+
+  ox-pandoc-builtin-org = epkgs.ox-pandoc.overrideAttrs (old: let
+    withoutOrg = builtins.filter (package: (package.pname or "") != "org");
+  in {
+    packageRequires = withoutOrg old.packageRequires;
+    propagatedBuildInputs = withoutOrg old.propagatedBuildInputs;
+  });
 in
   (with epkgs; [
     ace-window
@@ -131,15 +138,12 @@ in
     highlight-numbers
     highlight-quoted
     hl-todo
-    ivy-bibtex
     ligature
     magit
     marginalia
     markdown-mode
     nix-mode
     orderless
-    org-fragtog
-    org-ref
     outline-magic
     projectile
     racket-mode
@@ -165,5 +169,6 @@ in
     far
     matsurika-mode
     nyaatouch
+    ox-pandoc-builtin-org
     treeSitterGrammars
   ]
